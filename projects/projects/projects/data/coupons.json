@@ -1,0 +1,126 @@
+[
+  {
+    "id": "cp001",
+    "name": "5 元无门槛券",
+    "type": "no_threshold",
+    "discount": 5,
+    "minSpend": 0,
+    "validUntil": "2026-12-31",
+    "applicableCategories": ["all"],
+    "description": "无门槛立减 5 元"
+  },
+  {
+    "id": "cp002",
+    "name": "满 50 减 10",
+    "type": "threshold",
+    "discount": 10,
+    "minSpend": 50,
+    "validUntil": "2026-12-31",
+    "applicableCategories": ["all"],
+    "description": "订单满 50 元减 10 元"
+  },
+  {
+    "id": "cp003",
+    "name": "满 100 减 25",
+    "type": "threshold",
+    "discount": 25,
+    "minSpend": 100,
+    "validUntil": "2026-12-31",
+    "applicableCategories": ["all"],
+    "description": "订单满 100 元减 25 元"
+  },
+  {
+    "id": "cp004",
+    "name": "满 200 减 50",
+    "type": "threshold",
+    "discount": 50,
+    "minSpend": 200,
+    "validUntil": "2026-12-31",
+    "applicableCategories": ["all"],
+    "description": "订单满 200 元减 50 元"
+  },
+  {
+    "id": "cp005",
+    "name": "巧克力品类 8 折券",
+    "type": "category_rate",
+    "discountRate": 0.8,
+    "minSpend": 30,
+    "validUntil": "2026-12-31",
+    "applicableCategories": ["巧克力"],
+    "description": "巧克力类商品 8 折优惠"
+  },
+  {
+    "id": "cp006",
+    "name": "饼干糕点 9 折券",
+    "type": "category_rate",
+    "discountRate": 0.9,
+    "minSpend": 30,
+    "validUntil": "2026-12-31",
+    "applicableCategories": ["饼干糕点"],
+    "description": "饼干糕点类商品 9 折"
+  },
+  {
+    "id": "cp007",
+    "name": "新客专享 8 元无门槛",
+    "type": "new_user",
+    "discount": 8,
+    "minSpend": 0,
+    "validUntil": "2026-12-31",
+    "applicableCategories": ["all"],
+    "newUserOnly": true,
+    "description": "新客注册专享，首单立减 8 元"
+  },
+  {
+    "id": "cp008",
+    "name": "肉制品满 60 减 15",
+    "type": "category_threshold",
+    "discount": 15,
+    "minSpend": 60,
+    "validUntil": "2026-09-30",
+    "applicableCategories": ["肉制品"],
+    "description": "肉制品满 60 元减 15 元"
+  },
+  {
+    "id": "cp009",
+    "name": "办公室下午茶包 12 元券",
+    "type": "scenario",
+    "discount": 12,
+    "minSpend": 45,
+    "validUntil": "2026-12-31",
+    "applicableCategories": ["all"],
+    "scenario": "办公室",
+    "description": "工作日 14-17 点下单可用，满 45 减 12"
+  },
+  {
+    "id": "cp010",
+    "name": "节日礼盒满 150 减 35",
+    "type": "category_threshold",
+    "discount": 35,
+    "minSpend": 150,
+    "validUntil": "2026-12-31",
+    "applicableCategories": ["饼干糕点", "巧克力", "坚果"],
+    "tag": "礼盒",
+    "description": "礼盒类商品满 150 减 35（含曲奇/巧克力/坚果礼盒）"
+  },
+  {
+    "id": "cp011",
+    "name": "包邮券（满 29 可用）",
+    "type": "shipping",
+    "shippingDiscount": 8,
+    "minSpend": 29,
+    "validUntil": "2026-12-31",
+    "applicableCategories": ["all"],
+    "description": "订单满 29 元免运费（运费抵扣 8 元）"
+  },
+  {
+    "id": "cp012",
+    "name": "儿童零食包 8.5 折",
+    "type": "category_rate",
+    "discountRate": 0.85,
+    "minSpend": 40,
+    "validUntil": "2026-08-31",
+    "applicableCategories": ["蜜饯果干", "糖果", "膨化食品"],
+    "tag": "儿童",
+    "description": "儿童节专区商品 8.5 折"
+  }
+]

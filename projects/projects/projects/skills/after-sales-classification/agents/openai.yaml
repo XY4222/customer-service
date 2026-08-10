@@ -1,0 +1,19 @@
+name: 售后问题分类
+description: 将用户售后请求精确分类（退货/换货/补发/退款/投诉/咨询），匹配对应售后政策。
+version: 1.0.0
+model: doubao-seed-2-0-mini-260215
+temperature: 0.1
+maxTokens: 500
+required_tools: [query_return_policy]
+input_schema:
+  type: object
+  required: [request]
+  properties:
+    request: { type: string }
+output_schema:
+  type: object
+  required: [category]
+  properties:
+    category: { type: string, enum: [return, exchange, resend, refund, complaint, inquiry] }
+    policyIds: { type: array, items: { type: string } }
+    summary: { type: string }

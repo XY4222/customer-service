@@ -1,0 +1,75 @@
+{
+  "policies": [
+    {
+      "id": "return_7days",
+      "name": "7天无理由退货",
+      "category": "return",
+      "appliesTo": ["all"],
+      "excludes": ["p_011", "fresh"],
+      "conditions": ["签收后7天内", "商品未开封/不影响二次销售"],
+      "refundMethod": "原路退回",
+      "shipping": "客户承担（质量问题除外）",
+      "description": "商品签收之日起 7 天内，未开封且不影响二次销售可申请无理由退货。"
+    },
+    {
+      "id": "exchange_quality",
+      "name": "质量问题换货",
+      "category": "exchange",
+      "appliesTo": ["all"],
+      "conditions": ["签收后30天内", "非人为损坏", "提供问题照片"],
+      "refundMethod": "补发同商品",
+      "shipping": "店铺承担",
+      "description": "商品本身质量问题（变质、漏气、异物、过期），30天内免费换货或退款。"
+    },
+    {
+      "id": "refund_damaged",
+      "name": "破损/丢件退款",
+      "category": "refund",
+      "appliesTo": ["all"],
+      "conditions": ["收到货24小时内反馈", "提供包裹外箱+商品照片"],
+      "refundMethod": "全额退款或补发",
+      "shipping": "店铺承担",
+      "description": "运输途中破损、丢件，24小时内联系客服可全额退款或补发。"
+    },
+    {
+      "id": "refund_not_received",
+      "name": "未收到货退款",
+      "category": "refund",
+      "appliesTo": ["all"],
+      "conditions": ["物流显示签收超过3天仍未收到", "或超过预计送达时间7天"],
+      "refundMethod": "全额退款",
+      "shipping": "店铺承担",
+      "description": "长时间未收到货，经物流核实后可全额退款。"
+    },
+    {
+      "id": "wrong_item",
+      "name": "错发漏发",
+      "category": "refund",
+      "appliesTo": ["all"],
+      "conditions": ["收到货24小时内反馈", "提供订单截图和收到商品照片"],
+      "refundMethod": "补发漏发商品 / 错发商品可留可退",
+      "shipping": "店铺承担",
+      "description": "收到商品与订单不符或漏发，立即联系客服处理。"
+    },
+    {
+      "id": "food_safety",
+      "name": "食品安全问题",
+      "category": "escalate",
+      "appliesTo": ["all"],
+      "conditions": ["发现异物/发霉/异味/过敏反应"],
+      "refundMethod": "全额退款 + 专员跟进",
+      "shipping": "店铺承担",
+      "description": "任何食品安全问题立即转人工专员，2小时内响应，必要时启动召回流程。"
+    },
+    {
+      "id": "allergy_disclaimer",
+      "name": "过敏原提示",
+      "category": "disclaimer",
+      "appliesTo": ["all"],
+      "conditions": [],
+      "refundMethod": null,
+      "shipping": null,
+      "description": "店铺商品可能含有坚果、乳制品、小麦、大豆等过敏原。过敏体质请仔细阅读配料表。因个人体质过敏不在退换范围。"
+    }
+  ]
+}

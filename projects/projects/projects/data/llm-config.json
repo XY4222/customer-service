@@ -1,0 +1,71 @@
+{
+  "activeProvider": "openai-compatible",
+  "providers": {
+    "coze": {
+      "enabled": true,
+      "label": "扣子豆包 (Doubao)",
+      "description": "通过 coze-coding-dev-sdk 调用，需要沙箱凭证，沙箱内开箱即用。",
+      "defaultModel": "doubao-seed-1-8-251228",
+      "models": [
+        {
+          "id": "doubao-seed-1-8-251228",
+          "label": "Doubao Seed 1.8"
+        }
+      ]
+    },
+    "openai-compatible": {
+      "enabled": true,
+      "label": "OpenAI 兼容 (DeepSeek / Kimi / GLM / 任意 /v1/chat/completions)",
+      "description": "任何兼容 OpenAI Chat Completions 接口的服务。需在环境变量中配置 API Key。",
+      "defaultModel": "deepseek-v4-pro",
+      "models": [
+        {
+          "id": "deepseek-v4-pro",
+          "label": "DeepSeek V4 Pro (reasoning)"
+        },
+        {
+          "id": "deepseek-v4-flash",
+          "label": "DeepSeek V4 Flash (deepseek-chat 别名)"
+        },
+        {
+          "id": "doubao-seed-1-8-251228",
+          "label": "Doubao Seed 1.8 (沙箱内置)"
+        },
+        {
+          "id": "doubao-seed-2-0-mini-260215",
+          "label": "Doubao Seed 2.0 Mini"
+        },
+        {
+          "id": "deepseek-v3-2-251201",
+          "label": "DeepSeek V3.2"
+        },
+        {
+          "id": "kimi-k2-5-260127",
+          "label": "Kimi K2.5"
+        },
+        {
+          "id": "glm-4-7-251222",
+          "label": "智谱 GLM-4.7"
+        }
+      ],
+      "baseUrlEnvName": "OPENAI_BASE_URL",
+      "apiKeyEnvName": "OPENAI_API_KEY",
+      "defaultBaseUrl": "https://api.openai.com/v1",
+      "requiresApiKey": true
+    },
+    "classroom-fixture": {
+      "enabled": true,
+      "label": "演示稳定模式",
+      "description": "使用内置确定性输出，不依赖任何外部凭证。教学/演示专用，非真实大模型。",
+      "defaultModel": "fixture-v1",
+      "models": [
+        {
+          "id": "fixture-v1",
+          "label": "Fixture v1 (内置确定性输出)"
+        }
+      ],
+      "requiresApiKey": false
+    }
+  },
+  "updatedAt": "2026-07-19T10:43:37.173Z"
+}

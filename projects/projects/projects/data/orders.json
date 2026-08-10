@@ -1,0 +1,113 @@
+{
+  "orders": [
+    {
+      "id": "SP20240601001",
+      "userId": "u_demo_01",
+      "status": "delivered",
+      "createTime": "2024-06-01 10:23:00",
+      "items": [
+        {
+          "productId": "p_001",
+          "name": "海苔薯片原味",
+          "quantity": 2,
+          "unitPrice": 8.9
+        },
+        {
+          "productId": "p_005",
+          "name": "麻辣牛肉干",
+          "quantity": 1,
+          "unitPrice": 25.8
+        }
+      ],
+      "total": 43.6,
+      "paymentAmount": 38.6,
+      "discount": 5,
+      "address": "北京市朝阳区xx路xx号",
+      "trackingNo": "SF1234567890"
+    },
+    {
+      "id": "SP20240602002",
+      "userId": "u_demo_02",
+      "status": "shipped",
+      "createTime": "2024-06-02 15:10:00",
+      "items": [
+        {
+          "productId": "p_008",
+          "name": "焦糖巧克力礼盒",
+          "quantity": 1,
+          "unitPrice": 58
+        },
+        {
+          "productId": "p_009",
+          "name": "日式抹茶饼干礼盒",
+          "quantity": 1,
+          "unitPrice": 68
+        }
+      ],
+      "total": 126,
+      "paymentAmount": 116,
+      "discount": 10,
+      "address": "上海市浦东新区xx路xx号",
+      "trackingNo": "YT9876543210"
+    },
+    {
+      "id": "SP20240603003",
+      "userId": "u_demo_03",
+      "status": "pending",
+      "createTime": "2024-06-03 09:00:00",
+      "items": [
+        {
+          "productId": "p_003",
+          "name": "蜂蜜黄油坚果",
+          "quantity": 3,
+          "unitPrice": 18.5
+        }
+      ],
+      "total": 55.5,
+      "paymentAmount": 45.5,
+      "discount": 10,
+      "address": "广州市天河区xx路xx号",
+      "trackingNo": null
+    },
+    {
+      "id": "SP20240604004",
+      "userId": "u_demo_01",
+      "status": "refunded",
+      "createTime": "2024-05-25 18:40:00",
+      "items": [
+        {
+          "productId": "p_006",
+          "name": "咸蛋黄鱼皮",
+          "quantity": 1,
+          "unitPrice": 12.9
+        }
+      ],
+      "total": 12.9,
+      "paymentAmount": 12.9,
+      "discount": 0,
+      "address": "北京市朝阳区xx路xx号",
+      "trackingNo": "ZTO5566778899",
+      "refundReason": "收到货包装破损，鱼皮受潮"
+    },
+    {
+      "id": "SP20240605005",
+      "userId": "u_demo_04",
+      "status": "return_pending",
+      "createTime": "2024-06-04 12:00:00",
+      "items": [
+        {
+          "productId": "p_010",
+          "name": "芒果干",
+          "quantity": 2,
+          "unitPrice": 14.5
+        }
+      ],
+      "total": 29,
+      "paymentAmount": 29,
+      "discount": 0,
+      "address": "成都市武侯区xx路xx号",
+      "trackingNo": "JD1122334455",
+      "refundReason": "口味不喜欢，想7天无理由退货"
+    }
+  ]
+}

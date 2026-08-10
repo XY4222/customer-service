@@ -1,0 +1,18 @@
+name: 会话总结
+description: 对多轮对话做摘要，提取关键信息（偏好/待办/未解决问题），供后续轮次或人工接管使用。
+version: 1.0.0
+model: doubao-seed-2-0-mini-260215
+temperature: 0.2
+maxTokens: 500
+input_schema:
+  type: object
+  required: [history]
+  properties:
+    history: { type: array }
+output_schema:
+  type: object
+  required: [summary]
+  properties:
+    summary: { type: string }
+    userPreferences: { type: array, items: { type: string } }
+    pendingIssues: { type: array, items: { type: string } }

@@ -1,0 +1,21 @@
+name: 缺货替代推荐
+description: 当目标商品缺货/不符合要求时，从同品类中推荐最相似的替代商品。
+version: 1.0.0
+model: doubao-seed-2-0-mini-260215
+temperature: 0.4
+maxTokens: 600
+required_tools: [query_products]
+input_schema:
+  type: object
+  required: [missingProduct, candidates]
+  properties:
+    missingProduct: { type: string }
+    candidates: { type: array }
+    reason: { type: string }
+output_schema:
+  type: object
+  required: [substitutable]
+  properties:
+    substitutable: { type: boolean }
+    substituteId: { type: string }
+    similarityReason: { type: string }

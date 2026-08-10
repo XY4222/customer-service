@@ -1,0 +1,28 @@
+{
+  "tickets": [
+    {
+      "ticketId": "TKMRM9DKF277a2",
+      "orderId": "ORD20240715001",
+      "type": "refund",
+      "typeLabel": "退款",
+      "description": "商品破损想退款",
+      "images": [],
+      "contactPhone": null,
+      "status": "open",
+      "createdAt": "2026-07-15T15:52:18.590Z",
+      "promisedReplyBy": "2026-07-15T23:52:18.590Z"
+    },
+    {
+      "ticketId": "TKMRM9I516b5fc",
+      "orderId": "ORD20240715001",
+      "type": "refund",
+      "typeLabel": "退款",
+      "description": "收到的商品包装破损，有渗漏，希望退款",
+      "images": [],
+      "contactPhone": null,
+      "status": "open",
+      "createdAt": "2026-07-15T15:55:51.931Z",
+      "promisedReplyBy": "2026-07-15T23:55:51.931Z"
+    }
+  ]
+}

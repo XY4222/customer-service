@@ -1,0 +1,55 @@
+{
+  "shipments": [
+    {
+      "trackingNo": "SF1234567890",
+      "carrier": "顺丰速运",
+      "status": "在途",
+      "latestLocation": "上海转运中心",
+      "estimatedDelivery": "2024-07-16 18:00",
+      "traces": [
+        {
+          "time": "2024-07-15 10:20",
+          "desc": "快件已揽收，从[杭州仓储中心]发出"
+        },
+        {
+          "time": "2024-07-15 15:40",
+          "desc": "快件到达[上海转运中心]"
+        },
+        {
+          "time": "2024-07-16 06:10",
+          "desc": "快件正在派送中"
+        }
+      ]
+    },
+    {
+      "trackingNo": "YT9876543210",
+      "carrier": "圆通速递",
+      "status": "已签收",
+      "latestLocation": "北京朝阳区",
+      "estimatedDelivery": "2024-07-14",
+      "traces": [
+        {
+          "time": "2024-07-13 09:00",
+          "desc": "快件已揽收"
+        },
+        {
+          "time": "2024-07-14 11:30",
+          "desc": "快件已签收，签收人：本人"
+        }
+      ]
+    },
+    {
+      "trackingNo": "JD5566778899",
+      "carrier": "京东物流",
+      "status": "待出库",
+      "latestLocation": "广州仓储中心",
+      "estimatedDelivery": "2024-07-17",
+      "traces": [
+        {
+          "time": "2024-07-15 20:00",
+          "desc": "订单已提交，等待出库"
+        }
+      ]
+    }
+  ]
+}

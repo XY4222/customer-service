@@ -1,0 +1,25 @@
+name: 商品推荐决策
+description: 基于已筛商品与用户需求，选择 1-3 个最适合的商品进行推荐。
+version: 1.0.0
+model: doubao-seed-2-0-mini-260215
+temperature: 0.2
+maxTokens: 600
+required_tools: [query_products]
+input_schema:
+  type: object
+  required: [requirement, candidates]
+  properties:
+    requirement: { type: object }
+    candidates: { type: array }
+output_schema:
+  type: object
+  required: [selected]
+  properties:
+    selected:
+      type: array
+      items:
+        type: object
+        required: [productId, reason]
+        properties:
+          productId: { type: string }
+          reason: { type: string }

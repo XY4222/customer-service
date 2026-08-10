@@ -1,0 +1,23 @@
+name: 风控审核
+description: 对最终回复做合规检查（禁词/过度承诺/价格错/新人判断/安全风险），输出 passed + issues。
+version: 1.0.0
+model: doubao-seed-2-0-mini-260215
+temperature: 0.1
+maxTokens: 500
+final_required: true
+input_schema:
+  type: object
+  required: [reply, pricing]
+  properties:
+    reply: { type: string }
+    pricing: { type: object }
+    requirement: { type: object }
+output_schema:
+  type: object
+  required: [passed, issues]
+  properties:
+    passed: { type: boolean }
+    level: { type: string, enum: [low, medium, high, critical] }
+    issues:
+      type: array
+      items: { type: string }

@@ -1,0 +1,63 @@
+{
+  "tools": [
+    {
+      "id": "query_products",
+      "name": "查询商品",
+      "description": "按关键词/品类/口味/预算/场景过滤商品库",
+      "enabled": true,
+      "implementation": "local",
+      "sourceFile": "src/lib/tools.ts",
+      "dataSource": "data/products.json",
+      "category": "data"
+    },
+    {
+      "id": "query_activities",
+      "name": "查询活动",
+      "description": "查询满减、折扣、新客、品类活动",
+      "enabled": true,
+      "implementation": "local",
+      "sourceFile": "src/lib/tools.ts",
+      "dataSource": "data/activities.json",
+      "category": "data"
+    },
+    {
+      "id": "query_coupons",
+      "name": "查询优惠券",
+      "description": "查询可用优惠券，自动选最优",
+      "enabled": true,
+      "implementation": "local",
+      "sourceFile": "src/lib/tools.ts",
+      "dataSource": "data/coupons.json",
+      "category": "data"
+    },
+    {
+      "id": "calculate_price",
+      "name": "计算价格",
+      "description": "满减→品类折扣→新客立减→优惠券→finalPrice",
+      "enabled": true,
+      "implementation": "local",
+      "sourceFile": "src/lib/tools.ts",
+      "category": "calc"
+    },
+    {
+      "id": "query_order",
+      "name": "查询订单",
+      "description": "根据订单号查询订单状态和物流",
+      "enabled": true,
+      "implementation": "local",
+      "sourceFile": "src/lib/tools-ex.ts",
+      "dataSource": "data/orders.json",
+      "category": "data"
+    },
+    {
+      "id": "query_return_policy",
+      "name": "退换货政策",
+      "description": "查询售后政策",
+      "enabled": true,
+      "implementation": "local",
+      "sourceFile": "src/lib/tools-ex.ts",
+      "dataSource": "data/return-policies.json",
+      "category": "data"
+    }
+  ]
+}

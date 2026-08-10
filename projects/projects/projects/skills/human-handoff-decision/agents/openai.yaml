@@ -1,0 +1,21 @@
+name: 人工接管判断
+description: 决定是否需要人工接管。触发条件：用户明确要求、风险等级 high/critical、投诉严重、连续3次失败。
+version: 1.0.0
+model: doubao-seed-2-0-mini-260215
+temperature: 0.1
+maxTokens: 400
+input_schema:
+  type: object
+  required: [history]
+  properties:
+    history: { type: array }
+    riskLevel: { type: string }
+    failedSteps: { type: array }
+    userExplicit: { type: boolean }
+output_schema:
+  type: object
+  required: [handoff, reason]
+  properties:
+    handoff: { type: boolean }
+    reason: { type: string }
+    priority: { type: string, enum: [normal, urgent, emergency] }

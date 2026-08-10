@@ -1,0 +1,18 @@
+name: 澄清问题生成
+description: 当用户需求信息不足时，生成 1-3 个自然的追问问题以获取必要信息。
+version: 1.0.0
+model: doubao-seed-2-0-mini-260215
+temperature: 0.6
+maxTokens: 400
+input_schema:
+  type: object
+  required: [partialRequirement]
+  properties:
+    partialRequirement: { type: object }
+    missingFields: { type: array, items: { type: string } }
+output_schema:
+  type: object
+  required: [needClarification, questions]
+  properties:
+    needClarification: { type: boolean }
+    questions: { type: array, items: { type: string } }

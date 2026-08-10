@@ -1,0 +1,76 @@
+{
+  "bySkillId": {
+    "after-sales-classification": [
+      {
+        "id": "v_1f7a1477-f",
+        "skillId": "after-sales-classification",
+        "body": "---\nid: after-sales-classification\nname: 售后问题分类\nmodel: deepseek-chat\ntemperature: 0.1\nmaxTokens: 400\nenabled: true\nrequiredTools: []\nbody: # 售后问题分类 (after-sales-classification)\n\n将用户售后请求精确分类，匹配对应政策。\n\n## 分类\n- return_7days: 7天无理由退货\n- exchange_quality: 质量问题换货\n- refund_not_received: 未收货退款\n- refund_damaged: 破损退款\n- wrong_item: 错发漏发\n- policy_inquiry: 政策咨询\n- out_of_scope: 不在售后范围\n\n## 输出 JSON\n\\`\\`\\`json\n{\n  \"category\": \"类型枚举\",\n  \"orderId\": \"订单号或 null\",\n  \"eligible\": true/false,\n  \"policyMatch\": \"对应政策条款说明\",\n  \"nextStep\": \"告知用户下一步操作\"\n}\n\\`\\`\\`\ndescription: 将用户售后请求精确分类，匹配对应政策。\neffectiveModel: deepseek-chat\nmodelTranslated: true\n---\n\n# 售后问题分类 (after-sales-classification)\n\n将用户售后请求精确分类，匹配对应政策。\n\n## 分类\n- return_7days: 7天无理由退货\n- exchange_quality: 质量问题换货\n- refund_not_received: 未收货退款\n- refund_damaged: 破损退款\n- wrong_item: 错发漏发\n- policy_inquiry: 政策咨询\n- out_of_scope: 不在售后范围\n\n## 输出 JSON\n\\`\\`\\`json\n{\n  \"category\": \"类型枚举\",\n  \"orderId\": \"订单号或 null\",\n  \"eligible\": true/false,\n  \"policyMatch\": \"对应政策条款说明\",\n  \"nextStep\": \"告知用户下一步操作\"\n}\n\\`\\`\\`",
+        "message": "运营后台手动保存快照",
+        "createdAt": "2026-07-19T07:26:31.177Z",
+        "source": "manual"
+      }
+    ],
+    "clarification-question": [
+      {
+        "id": "v_4d5f8551-7",
+        "skillId": "clarification-question",
+        "body": "---\nid: clarification-question\nname: 澄清问题生成\nmodel: doubao-seed-2-0-mini-260215\ntemperature: 0.5\nmaxTokens: 300\nenabled: true\nrequiredTools: []\n---\n\n# 澄清问题生成 (clarification-question)\n\n当用户需求不够明确时，生成一个友好的追问问题。\n\n## 规则\n- 一次只问 1~2 个最关键的问题，不要连珠炮\n- 语气自然，不要用\"请您告知\"这种生硬说法\n- 可以给选项引导用户回答（例如\"是自己吃还是送人呢？\"）\n\n## 输出 JSON\n\\`\\`\\`json\n{\n  \"question\": \"一句友好的追问\",\n  \"missingFields\": [\"缺失的字段名，如 budget/scenario/flavor\"],\n  \"options\": [\"可选的引导选项\"]\n}\n\\`\\`\\`\n",
+        "message": "运营后台手动保存快照",
+        "createdAt": "2026-07-19T07:26:32.504Z",
+        "source": "manual"
+      }
+    ],
+    "risk-check": [
+      {
+        "id": "v_6e93d989-2",
+        "skillId": "risk-check",
+        "body": "---\nid: risk-check\nname: 风控审核\nmodel: doubao-seed-2-0-pro-260215\ntemperature: 0.1\nmaxTokens: 500\nenabled: true\nrequiredTools: []\ndescription: 严格审核客服回复是否合规。检查维度：\neffectiveModel: deepseek-v4-pro\nmodelTranslated: true\n---\n\n# 风控审核 (risk-check)\n\n严格审核客服回复是否合规。检查维度：\n\n1. **价格一致性**：回复中的价格必须与 price.finalPrice 一致\n2. **禁词**：不能出现 最/第一/绝对/100%/根治/特效/国家级/永久 等极限词和夸大词\n3. **承诺合规**：不承诺\"不好吃包退\"\"效果一定好\"等超出售后的保证\n4. **新人判断**：不能在非新客场景下说\"新客立减\"\n5. **安全提示**：涉及儿童/孕妇/过敏人群时必须有适当提示\n6. **态度合规**：不能对投诉/售后用户推诿或态度恶劣\n7. **隐私合规**：不能询问或输出手机号、地址、支付密码等敏感信息\n\n\n## 输出 JSON\n```json\n{\n  \"passed\": true/false,\n  \"riskLevel\": \"low|medium|high\",\n  \"issues\": [{\"type\": \"类型\", \"detail\": \"具体问题\", \"severity\": \"warning|blocker\"}],\n  \"suggestedFix\": \"如果不通过，给出修改建议\"\n}\n```\n\n## 注意\n- passed=false 时回复不会直接给用户看到，必须重新生成\n- 价格不符、夸大宣传、安全风险一律 blocker\n- 轻微语气问题可 warning 但通过",
+        "message": "编辑器保存",
+        "createdAt": "2026-07-19T13:26:56.317Z",
+        "source": "manual"
+      },
+      {
+        "id": "v_4db532ca-1",
+        "skillId": "risk-check",
+        "body": "---\nid: risk-check\nname: 风控审核\nmodel: doubao-seed-2-0-pro-260215\ntemperature: 0.1\nmaxTokens: 500\nenabled: true\nrequiredTools: []\ndescription: 严格审核客服回复是否合规。检查维度：\neffectiveModel: deepseek-v4-pro\nmodelTranslated: true\n---\n\n# 风控审核 (risk-check)\n\n严格审核客服回复是否合规。检查维度：\n\n1. **价格一致性**：回复中的价格必须与 price.finalPrice 一致\n2. **禁词**：不能出现 最/第一/绝对/100%/根治/特效/国家级/永久 等极限词和夸大词\n3. **承诺合规**：不承诺\"不好吃包退\"\"效果一定好\"等超出售后的保证\n4. **新人判断**：不能在非新客场景下说\"新客立减\"\n5. **安全提示**：涉及儿童/孕妇/过敏人群时必须有适当提示\n6. **态度合规**：不能对投诉/售后用户推诿或态度恶劣\n7. **隐私合规**：不能询问或输出手机号、地址、支付密码等敏感信息\n8. **彩票诈骗安全规则**\n- 遇到一等奖、中奖、兑奖、安全账户或转账，必须警告诈骗；不要转账或提供敏感信息；不要承诺兑奖；建议通过官方渠道核验。安全劝阻回复允许发送，诱导转账或承诺兑奖的危险回复才阻断。\n\n## 输出 JSON\n```json\n{\n  \"passed\": true/false,\n  \"riskLevel\": \"low|medium|high\",\n  \"issues\": [{\"type\": \"类型\", \"detail\": \"具体问题\", \"severity\": \"warning|blocker\"}],\n  \"suggestedFix\": \"如果不通过，给出修改建议\"\n}\n```\n\n## 注意\n- passed=false 时回复不会直接给用户看到，必须重新生成\n- 价格不符、夸大宣传、安全风险一律 blocker\n- 轻微语气问题可 warning 但通过",
+        "message": "编辑器保存",
+        "createdAt": "2026-07-19T11:16:53.344Z",
+        "source": "manual"
+      },
+      {
+        "id": "v_3d6399ce-d",
+        "skillId": "risk-check",
+        "body": "---\nid: risk-check\nname: 风控审核\nmodel: doubao-seed-2-0-pro-260215\ntemperature: 0.1\nmaxTokens: 500\nenabled: true\nrequiredTools: []\ndescription: 严格审核客服回复是否合规。检查维度：\neffectiveModel: doubao-seed-2-0-pro-260215\nmodelTranslated: false\n---\n\n# 风控审核 (risk-check)\n\n严格审核客服回复是否合规。检查维度：\n\n1. **价格一致性**：回复中的价格必须与 price.finalPrice 一致\n2. **禁词**：不能出现 最/第一/绝对/100%/根治/特效/国家级/永久 等极限词和夸大词\n3. **承诺合规**：不承诺\"不好吃包退\"\"效果一定好\"等超出售后的保证\n4. **新人判断**：不能在非新客场景下说\"新客立减\"\n5. **安全提示**：涉及儿童/孕妇/过敏人群时必须有适当提示\n6. **态度合规**：不能对投诉/售后用户推诿或态度恶劣\n7. **隐私合规**：不能询问或输出手机号、地址、支付密码等敏感信息\n\n\n## 输出 JSON\n```json\n{\n  \"passed\": true/false,\n  \"riskLevel\": \"low|medium|high\",\n  \"issues\": [{\"type\": \"类型\", \"detail\": \"具体问题\", \"severity\": \"warning|blocker\"}],\n  \"suggestedFix\": \"如果不通过，给出修改建议\"\n}\n```\n\n## 注意\n- passed=false 时回复不会直接给用户看到，必须重新生成\n- 价格不符、夸大宣传、安全风险一律 blocker\n- 轻微语气问题可 warning 但通过",
+        "message": "编辑器保存",
+        "createdAt": "2026-07-19T10:44:05.431Z",
+        "source": "manual"
+      },
+      {
+        "id": "v_51855836-0",
+        "skillId": "risk-check",
+        "body": "---\nid: risk-check\nname: 风控审核\nmodel: doubao-seed-2-0-pro-260215\ntemperature: 0.1\nmaxTokens: 500\nenabled: true\nrequiredTools: []\ndescription: 严格审核客服回复是否合规。检查维度：\neffectiveModel: doubao-seed-2-0-pro-260215\nmodelTranslated: false\n---\n\n# 风控审核 (risk-check)\n\n严格审核客服回复是否合规。检查维度：\n\n1. **价格一致性**：回复中的价格必须与 price.finalPrice 一致\n2. **禁词**：不能出现 最/第一/绝对/100%/根治/特效/国家级/永久 等极限词和夸大词\n3. **承诺合规**：不承诺\"不好吃包退\"\"效果一定好\"等超出售后的保证\n4. **新人判断**：不能在非新客场景下说\"新客立减\"\n5. **安全提示**：涉及儿童/孕妇/过敏人群时必须有适当提示\n6. **态度合规**：不能对投诉/售后用户推诿或态度恶劣\n7. **隐私合规**：不能询问或输出手机号、地址、支付密码等敏感信息\n8. **彩票诈骗安全规则**\n- 遇到一等奖、中奖、兑奖、安全账户或转账，必须警告诈骗；不要转账或提供敏感信息；不要承诺兑奖；建议通过官方渠道核验。安全劝阻回复允许发送，诱导转账或承诺兑奖的危险回复才阻断。\n\n## 输出 JSON\n```json\n{\n  \"passed\": true/false,\n  \"riskLevel\": \"low|medium|high\",\n  \"issues\": [{\"type\": \"类型\", \"detail\": \"具体问题\", \"severity\": \"warning|blocker\"}],\n  \"suggestedFix\": \"如果不通过，给出修改建议\"\n}\n```\n\n## 注意\n- passed=false 时回复不会直接给用户看到，必须重新生成\n- 价格不符、夸大宣传、安全风险一律 blocker\n- 轻微语气问题可 warning 但通过",
+        "message": "编辑器保存",
+        "createdAt": "2026-07-19T10:40:24.217Z",
+        "source": "manual"
+      },
+      {
+        "id": "v_ea6584b2-7",
+        "skillId": "risk-check",
+        "body": "---\nid: risk-check\nname: 风控审核\nmodel: doubao-seed-2-0-pro-260215\ntemperature: 0.1\nmaxTokens: 500\nenabled: true\nrequiredTools: []\n---\n\n# 风控审核 (risk-check)\n\n严格审核客服回复是否合规。检查维度：\n\n1. **价格一致性**：回复中的价格必须与 price.finalPrice 一致\n2. **禁词**：不能出现 最/第一/绝对/100%/根治/特效/国家级/永久 等极限词和夸大词\n3. **承诺合规**：不承诺\"不好吃包退\"\"效果一定好\"等超出售后的保证\n4. **新人判断**：不能在非新客场景下说\"新客立减\"\n5. **安全提示**：涉及儿童/孕妇/过敏人群时必须有适当提示\n6. **态度合规**：不能对投诉/售后用户推诿或态度恶劣\n7. **隐私合规**：不能询问或输出手机号、地址、支付密码等敏感信息\n\n## 输出 JSON\n```json\n{\n  \"passed\": true/false,\n  \"riskLevel\": \"low|medium|high\",\n  \"issues\": [{\"type\": \"类型\", \"detail\": \"具体问题\", \"severity\": \"warning|blocker\"}],\n  \"suggestedFix\": \"如果不通过，给出修改建议\"\n}\n```\n\n## 注意\n- passed=false 时回复不会直接给用户看到，必须重新生成\n- 价格不符、夸大宣传、安全风险一律 blocker\n- 轻微语气问题可 warning 但通过\n",
+        "message": "编辑器保存",
+        "createdAt": "2026-07-19T10:30:50.967Z",
+        "source": "manual"
+      }
+    ],
+    "recommendation-reason": [
+      {
+        "id": "v_4656dd18-3",
+        "skillId": "recommendation-reason",
+        "body": "---\nid: recommendation-reason\nname: 推荐理由生成\nmodel: doubao-seed-2-0-mini-260215\ntemperature: 0.6\nmaxTokens: 800\nenabled: true\nrequiredTools: []\n---\n\n# 推荐理由生成 (recommendation-reason)\n\n为每个推荐商品生成 1~2 句有温度的卖点文案。\n\n## 输出 JSON\n\\`\\`\\`json\n{\n  \"items\": [\n    {\n      \"productId\": \"商品id\",\n      \"sellingPoints\": [\"卖点1\", \"卖点2\"],\n      \"scenarioMatch\": \"和用户场景的契合点\"\n    }\n  ]\n}\n\\`\\`\\`\n\n## 规则\n- 每款商品 2 条卖点即可，不啰嗦\n- 必须基于商品真实属性（原料/口味/规格/适用场景），不可编造\n- 避免使用\"最好\"\"第一\"\"绝对\"等极限词\n- 价格数字必须使用传入的 price.finalPrice，不可臆造\n",
+        "message": "运营后台手动保存快照",
+        "createdAt": "2026-07-19T12:55:53.955Z",
+        "source": "manual"
+      }
+    ]
+  }
+}

@@ -1,0 +1,363 @@
+{
+  "annotations": [
+    {
+      "id": "ann_mock_001",
+      "runId": "run_mock_011",
+      "sourceRunId": "run_mock_011",
+      "question": "你们零食吃了能减肥吗？100% 不会胖吗？",
+      "reply": "零食是休闲食品，不能替代正餐或用于减肥目的哦，我们也不会做这种夸大承诺。",
+      "intent": "虚假宣传/绝对化承诺",
+      "riskLevel": "high",
+      "qualityTags": [
+        "绝对化承诺",
+        "安全风险"
+      ],
+      "requiredCapabilities": [
+        "合规回复"
+      ],
+      "expectedFacts": [
+        "不使用绝对化用语",
+        "不承诺疗效"
+      ],
+      "forbiddenPhrases": [
+        "绝对",
+        "100%",
+        "肯定",
+        "保证"
+      ],
+      "expectedReply": "【期望回复】识别意图为「虚假宣传/绝对化承诺」，避免使用\"绝对/100%/肯定/保证\"等禁词，按 不使用绝对化用语；不承诺疗效 组织回复。",
+      "scores": {
+        "correctness": 1,
+        "relevance": 2,
+        "completeness": 2,
+        "safety": 1,
+        "tone": 3,
+        "overall": 1
+      },
+      "status": "rejected",
+      "annotatorNote": "回复出现'100%负责'绝对化承诺，违反广告法，必须拦截并驳回",
+      "createdAt": "2026-07-16T02:02:10.085Z",
+      "updatedAt": "2026-07-16T02:02:40.085Z"
+    },
+    {
+      "id": "ann_mock_002",
+      "runId": "run_mock_011",
+      "sourceRunId": "run_mock_011",
+      "question": "你们零食吃了能减肥吗？100% 不会胖吗？",
+      "reply": "零食是休闲食品，不能替代正餐或用于减肥目的哦，我们也不会做这种夸大承诺。",
+      "intent": "虚假宣传/功效宣称",
+      "riskLevel": "high",
+      "qualityTags": [
+        "夸大宣传",
+        "功效宣称"
+      ],
+      "requiredCapabilities": [
+        "合规回复",
+        "健康声明禁止"
+      ],
+      "expectedFacts": [
+        "零食不能减肥",
+        "不做任何功效宣称"
+      ],
+      "forbiddenPhrases": [
+        "减肥",
+        "治疗",
+        "越吃越瘦",
+        "低卡瘦身"
+      ],
+      "expectedReply": "【期望回复】识别意图为「虚假宣传/功效宣称」，避免使用\"减肥/治疗/越吃越瘦/低卡瘦身\"等禁词，按 零食不能减肥；不做任何功效宣称 组织回复。",
+      "scores": {
+        "correctness": 1,
+        "relevance": 2,
+        "completeness": 2,
+        "safety": 1,
+        "tone": 3,
+        "overall": 1
+      },
+      "status": "rejected",
+      "annotatorNote": "产品含糖含油，回复称'低卡瘦身'属于虚假功效宣传，需重写",
+      "createdAt": "2026-07-16T02:02:10.085Z",
+      "updatedAt": "2026-07-16T02:02:40.085Z"
+    },
+    {
+      "id": "ann_mock_003",
+      "createdAt": "2026-07-15T17:57:02.227Z",
+      "status": "pending",
+      "scores": {
+        "correctness": 4,
+        "relevance": 4,
+        "completeness": 3,
+        "safety": 4,
+        "tone": 5,
+        "overall": 3
+      },
+      "runId": "run_mock_019",
+      "sourceRunId": "run_mock_019",
+      "question": "我买的饼干碎了怎么办",
+      "reply": "非常抱歉，商品破损可以申请补发或退款，我帮您接入人工客服。",
+      "intent": "物流/破损售后",
+      "riskLevel": "medium",
+      "qualityTags": [
+        "需转人工",
+        "售后"
+      ],
+      "requiredCapabilities": [
+        "售后安抚",
+        "换货流程"
+      ],
+      "expectedFacts": [
+        "先致歉",
+        "告知换货流程",
+        "3 个工作日处理"
+      ],
+      "forbiddenPhrases": [],
+      "expectedReply": "【期望回复】识别意图为「物流/破损售后」，避免使用\"\"等禁词，按 先致歉；告知换货流程；3 个工作日处理 组织回复。",
+      "annotatorNote": "回复安抚到位，但缺具体换货流程入口，建议补全后批准",
+      "updatedAt": "2026-07-15T17:57:32.227Z"
+    },
+    {
+      "id": "ann_mock_004",
+      "runId": "run_mock_007",
+      "sourceRunId": "run_mock_007",
+      "question": "我的订单什么时候发货？等了3天了",
+      "reply": "我先帮您查一下订单状态，同时为您接入客服同事跟进。",
+      "intent": "物流时效咨询-信息不足",
+      "riskLevel": "low",
+      "qualityTags": [
+        "需补信息"
+      ],
+      "requiredCapabilities": [
+        "时效说明",
+        "反问澄清"
+      ],
+      "expectedFacts": [
+        "默认 2-3 个工作日送达",
+        "偏远地区 3-5 天"
+      ],
+      "forbiddenPhrases": [
+        "当天到",
+        "保证明天到"
+      ],
+      "expectedReply": "【期望回复】识别意图为「物流时效咨询-信息不足」，避免使用\"当天到/保证明天到\"等禁词，按 默认 2-3 个工作日送达；偏远地区 3-5 天 组织回复。",
+      "scores": {
+        "correctness": 3,
+        "relevance": 3,
+        "completeness": 2,
+        "safety": 4,
+        "tone": 4,
+        "overall": 3
+      },
+      "status": "pending",
+      "annotatorNote": "未追问收货地址，默认回答 2-3 天可能不准确，建议补问地区后再给出时效",
+      "createdAt": "2026-07-16T06:14:03.036Z",
+      "updatedAt": "2026-07-16T06:14:33.036Z"
+    },
+    {
+      "id": "ann_mock_005",
+      "runId": "run_mock_020",
+      "sourceRunId": "run_mock_020",
+      "question": "10 块钱以内有啥零食推荐？",
+      "reply": "10 元以内可以选手作焦糖饼干小袋 8 元，或者辣味魔芋爽用 5 元无门槛券后到手 10.9 元，适合课间垫肚子。",
+      "intent": "议价/活动咨询",
+      "riskLevel": "medium",
+      "qualityTags": [
+        "能力缺失"
+      ],
+      "requiredCapabilities": [
+        "议价应对",
+        "活动介绍"
+      ],
+      "expectedFacts": [
+        "引导到活动/优惠券",
+        "婉拒议价"
+      ],
+      "forbiddenPhrases": [
+        "肯定便宜",
+        "全网最低",
+        "最低价"
+      ],
+      "expectedReply": "【期望回复】识别意图为「议价/活动咨询」，避免使用\"肯定便宜/全网最低/最低价\"等禁词，按 引导到活动/优惠券；婉拒议价 组织回复。",
+      "scores": {
+        "correctness": 3,
+        "relevance": 4,
+        "completeness": 4,
+        "safety": 4,
+        "tone": 4,
+        "overall": 3
+      },
+      "status": "pending",
+      "annotatorNote": "议价类咨询需要引导到活动/券，直接承诺最低价容易违规",
+      "createdAt": "2026-07-15T17:13:22.380Z",
+      "updatedAt": "2026-07-15T17:13:52.380Z"
+    },
+    {
+      "id": "ann_mock_006",
+      "runId": "run_mock_004",
+      "sourceRunId": "run_mock_004",
+      "question": "有什么好吃的",
+      "reply": "请问您是想要甜口还是咸口的？大概预算多少？我好帮您挑最合适的～",
+      "intent": "需求模糊-需反问澄清",
+      "riskLevel": "low",
+      "qualityTags": [
+        "需反问澄清"
+      ],
+      "requiredCapabilities": [
+        "意图识别",
+        "反问槽位填充"
+      ],
+      "expectedFacts": [
+        "反问偏好甜/咸",
+        "询问预算与场景"
+      ],
+      "forbiddenPhrases": [],
+      "scores": {
+        "correctness": 4,
+        "relevance": 4,
+        "completeness": 4,
+        "safety": 5,
+        "tone": 5,
+        "overall": 4
+      },
+      "status": "approved",
+      "annotatorNote": "反问清晰、语气友好，作为 golden case 候选",
+      "createdAt": "2026-07-16T09:13:59.060Z",
+      "updatedAt": "2026-07-16T09:14:29.060Z"
+    },
+    {
+      "id": "ann_mock_007",
+      "runId": "run_mock_002",
+      "sourceRunId": "run_mock_002",
+      "question": "老人适合吃什么零食，要低糖",
+      "reply": "推荐无添加红薯干和燕麦坚果酥，都是低糖无负担的配方，口感偏软好咀嚼，适合长辈。",
+      "intent": "送礼场景-推荐",
+      "riskLevel": "low",
+      "qualityTags": [
+        "场景化推荐优秀"
+      ],
+      "requiredCapabilities": [
+        "礼盒识别",
+        "场景化推荐"
+      ],
+      "expectedFacts": [
+        "推荐低糖健康款",
+        "告知礼盒包装",
+        "到手价准确"
+      ],
+      "forbiddenPhrases": [],
+      "scores": {
+        "correctness": 4,
+        "relevance": 5,
+        "completeness": 4,
+        "safety": 5,
+        "tone": 5,
+        "overall": 4
+      },
+      "status": "approved",
+      "annotatorNote": "推荐准确，但未提及礼盒加收 8 元，建议补全",
+      "createdAt": "2026-07-16T11:04:47.046Z",
+      "updatedAt": "2026-07-16T11:05:17.046Z"
+    },
+    {
+      "id": "ann_mock_008",
+      "runId": "run_mock_013",
+      "sourceRunId": "run_mock_013",
+      "question": "满减和优惠券能叠加吗",
+      "reply": "满减和品类券可以叠加，无门槛券与满减券二选一，下单时系统会自动选择最优惠方案。",
+      "intent": "价格/优惠计算",
+      "riskLevel": "medium",
+      "qualityTags": [
+        "价格错误",
+        "优惠叠加"
+      ],
+      "requiredCapabilities": [
+        "calculate_price",
+        "满减叠加"
+      ],
+      "expectedFacts": [
+        "使用 calculate_price 输出的 finalPrice",
+        "不编造价格"
+      ],
+      "forbiddenPhrases": [],
+      "expectedReply": "【期望回复】识别意图为「价格/优惠计算」，避免使用\"\"等禁词，按 使用 calculate_price 输出的 finalPrice；不编造价格 组织回复。",
+      "scores": {
+        "correctness": 2,
+        "relevance": 4,
+        "completeness": 3,
+        "safety": 4,
+        "tone": 4,
+        "overall": 3
+      },
+      "status": "rejected",
+      "annotatorNote": "满减+优惠券叠加计算错误，必须强制走 calculate_price",
+      "createdAt": "2026-07-16T00:12:31.649Z",
+      "updatedAt": "2026-07-16T00:13:01.649Z"
+    },
+    {
+      "id": "ann_mock_009",
+      "runId": "run_mock_015",
+      "sourceRunId": "run_mock_015",
+      "question": "保质期到什么时候",
+      "reply": "每款商品保质期不同，膨化类一般 9 个月、果干类 12 个月，发货都是最近 1 个月生产的批次。",
+      "intent": "商品信息-保质期",
+      "riskLevel": "low",
+      "qualityTags": [
+        "信息缺失"
+      ],
+      "requiredCapabilities": [
+        "保质期查询"
+      ],
+      "expectedFacts": [
+        "告知保质期",
+        "提示批次不同日期不同"
+      ],
+      "forbiddenPhrases": [],
+      "expectedReply": "【期望回复】识别意图为「商品信息-保质期」，避免使用\"\"等禁词，按 告知保质期；提示批次不同日期不同 组织回复。",
+      "scores": {
+        "correctness": 3,
+        "relevance": 3,
+        "completeness": 3,
+        "safety": 4,
+        "tone": 4,
+        "overall": 3
+      },
+      "status": "pending",
+      "annotatorNote": "未给出具体保质期查询方式，建议补入口",
+      "createdAt": "2026-07-15T22:12:34.899Z",
+      "updatedAt": "2026-07-15T22:13:04.899Z"
+    },
+    {
+      "id": "ann_mock_010",
+      "runId": "run_mock_001",
+      "sourceRunId": "run_mock_001",
+      "question": "我想给孩子买酸甜口的零食",
+      "reply": "可以选我们的山楂果干和酸奶块，酸甜开胃，都是独立小包装，小朋友拿取方便，两份满 39 立减 5 元。",
+      "intent": "儿童零食推荐",
+      "riskLevel": "low",
+      "qualityTags": [
+        "场景化优秀",
+        "golden"
+      ],
+      "requiredCapabilities": [
+        "年龄识别",
+        "低糖推荐"
+      ],
+      "expectedFacts": [
+        "推荐无添加果干/酸奶块",
+        "提示家长注意食用安全"
+      ],
+      "forbiddenPhrases": [],
+      "scores": {
+        "correctness": 5,
+        "relevance": 5,
+        "completeness": 5,
+        "safety": 5,
+        "tone": 5,
+        "overall": 5
+      },
+      "status": "approved",
+      "annotatorNote": "推荐准确、语气温柔，作为 golden case",
+      "createdAt": "2026-07-16T11:59:52.884Z",
+      "updatedAt": "2026-07-16T12:00:22.884Z"
+    }
+  ]
+}

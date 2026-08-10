@@ -1,0 +1,27 @@
+name: 送礼场景推荐
+description: 针对送礼场景（生日/节日/拜访/儿童/长辈）推荐合适的零食礼盒组合，附贴心话术。
+version: 1.0.0
+model: doubao-seed-2-0-mini-260215
+temperature: 0.6
+maxTokens: 800
+required_tools: [query_products]
+input_schema:
+  type: object
+  required: [recipient, budget]
+  properties:
+    recipient: { type: string }
+    budget: { type: number }
+    occasion: { type: string }
+output_schema:
+  type: object
+  required: [recommendations]
+  properties:
+    recommendations:
+      type: array
+      items:
+        type: object
+        required: [productId, why]
+        properties:
+          productId: { type: string }
+          why: { type: string }
+    greeting: { type: string }

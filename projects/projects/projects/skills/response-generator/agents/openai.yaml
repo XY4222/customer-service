@@ -1,0 +1,19 @@
+name: 客服话术生成
+description: 结合商品、价格、活动、优惠，生成最终的自然语言客服回复。强制使用 price.finalPrice，禁止编造价格/活动。
+version: 1.0.0
+model: doubao-seed-2-0-mini-260215
+temperature: 0.7
+maxTokens: 1000
+required_tools: [calculate_price]
+input_schema:
+  type: object
+  required: [requirement, products, pricing]
+  properties:
+    requirement: { type: object }
+    products: { type: array }
+    pricing: { type: object }
+output_schema:
+  type: object
+  required: [reply]
+  properties:
+    reply: { type: string }

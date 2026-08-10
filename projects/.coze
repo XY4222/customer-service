@@ -1,0 +1,22 @@
+[project]
+requires = ["nodejs-24"]
+project_type = "web"
+
+[preview]
+preview_enable = "enabled"
+
+[dev]
+build = ["bash", "projects/projects/scripts/coze-preview-build.sh"]
+run = ["bash", "projects/projects/scripts/coze-preview-run.sh"]
+validate = ["bash", "projects/projects/scripts/validate.sh"]
+
+[deploy]
+build = ["bash", "projects/projects/scripts/build.sh"]
+run = ["bash", "projects/projects/scripts/start.sh"]
+
+[deploy.profile]
+kind = "service"
+flavor = "web"
+
+[subprojects]
+path = ["projects/projects"]

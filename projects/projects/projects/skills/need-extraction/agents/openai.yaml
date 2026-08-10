@@ -1,0 +1,24 @@
+name: 用户需求结构化
+description: 从用户自然语言问题中提取结构化字段：意图/品类/口味/预算/场景/是否新客/过敏原等。
+version: 1.0.0
+model: doubao-seed-2-0-mini-260215
+temperature: 0.1
+maxTokens: 600
+input_schema:
+  type: object
+  required: [question]
+  properties:
+    question: { type: string }
+    conversationHistory: { type: array }
+output_schema:
+  type: object
+  required: [intent, isNewUser]
+  properties:
+    intent: { type: string, enum: [recommend, inquire_price, complain, after_sales, allergy_risk, gift, other] }
+    categories: { type: array, items: { type: string } }
+    flavorTags: { type: array, items: { type: string } }
+    budget: { type: number }
+    scenario: { type: string }
+    isNewUser: { type: boolean }
+    allergens: { type: array, items: { type: string } }
+    needHuman: { type: boolean }

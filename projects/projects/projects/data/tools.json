@@ -1,0 +1,11 @@
+{
+  "tools": {
+    "query_products": { "enabled": true, "implementation": "native" },
+    "query_activities": { "enabled": true, "implementation": "native" },
+    "query_coupons": { "enabled": true, "implementation": "native" },
+    "calculate_price": { "enabled": true, "implementation": "native" },
+    "query_order": { "enabled": true, "implementation": "native" },
+    "query_return_policy": { "enabled": true, "implementation": "native" }
+  },
+  "mcpServers": []
+}

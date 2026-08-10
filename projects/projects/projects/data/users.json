@@ -1,0 +1,48 @@
+{
+  "users": [
+    {
+      "userId": "u001",
+      "nickname": "小食迷",
+      "level": "gold",
+      "totalSpent": 680,
+      "orderCount": 12,
+      "isNewUser": false,
+      "tags": [
+        "爱吃辣",
+        "办公室零食",
+        "复购客"
+      ],
+      "lastOrderDate": "2024-07-10",
+      "allergies": []
+    },
+    {
+      "userId": "u002",
+      "nickname": "",
+      "level": "silver",
+      "totalSpent": 260,
+      "orderCount": 4,
+      "isNewUser": false,
+      "tags": [
+        "送礼",
+        "礼盒"
+      ],
+      "lastOrderDate": "2024-06-28",
+      "allergies": [
+        "花生"
+      ]
+    },
+    {
+      "userId": "u_new",
+      "nickname": "",
+      "level": "normal",
+      "totalSpent": 0,
+      "orderCount": 0,
+      "isNewUser": true,
+      "tags": [
+        "新客"
+      ],
+      "lastOrderDate": null,
+      "allergies": []
+    }
+  ]
+}

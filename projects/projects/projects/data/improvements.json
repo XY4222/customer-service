@@ -1,0 +1,30 @@
+{
+  "improvements": [
+    {
+      "id": "imp_1784105063553",
+      "source": "low_rating",
+      "title": "1 分差评：我是新客，想送女朋友一份礼盒",
+      "description": "用户问题：我是新客，想送女朋友一份礼盒\nAI回复：",
+      "targetType": "skill",
+      "weakDimensions": [
+        "overall"
+      ],
+      "severity": "high",
+      "status": "open",
+      "createdAt": "2026-07-15T08:44:23.553Z"
+    },
+    {
+      "id": "imp_1784104542922",
+      "source": "low_rating",
+      "title": "1 分差评：",
+      "description": "用户问题：\nAI回复：你好呀，我是小食铺客服～想挑点什么零食？可以直接说需求，比如「办公室吃不胖的小零食」「送给女朋友的礼盒」",
+      "targetType": "skill",
+      "weakDimensions": [
+        "overall"
+      ],
+      "severity": "high",
+      "status": "open",
+      "createdAt": "2026-07-15T08:35:42.922Z"
+    }
+  ]
+}

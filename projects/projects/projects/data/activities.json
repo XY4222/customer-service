@@ -1,0 +1,130 @@
+[
+  {
+    "id": "act001",
+    "name": "满 99 减 10",
+    "type": "full_reduction",
+    "threshold": 99,
+    "discount": 10,
+    "appliesTo": "all",
+    "startDate": "2025-01-01",
+    "endDate": "2026-12-31",
+    "description": "全场满 99 元立减 10 元"
+  },
+  {
+    "id": "act002",
+    "name": "满 199 减 30",
+    "type": "full_reduction",
+    "threshold": 199,
+    "discount": 30,
+    "appliesTo": "all",
+    "startDate": "2025-01-01",
+    "endDate": "2026-12-31",
+    "description": "全场满 199 元立减 30 元"
+  },
+  {
+    "id": "act003",
+    "name": "满 299 减 60",
+    "type": "full_reduction",
+    "threshold": 299,
+    "discount": 60,
+    "appliesTo": "all",
+    "startDate": "2025-01-01",
+    "endDate": "2026-12-31",
+    "description": "全场满 299 元立减 60 元，叠加品类折扣"
+  },
+  {
+    "id": "act004",
+    "name": "坚果 8 折",
+    "type": "category_discount",
+    "category": "坚果",
+    "discountRate": 0.8,
+    "appliesTo": "category",
+    "startDate": "2025-06-01",
+    "endDate": "2026-08-31",
+    "description": "坚果类商品全场 8 折"
+  },
+  {
+    "id": "act005",
+    "name": "糖果 9 折",
+    "type": "category_discount",
+    "category": "糖果",
+    "discountRate": 0.9,
+    "appliesTo": "category",
+    "startDate": "2025-06-01",
+    "endDate": "2026-08-31",
+    "description": "糖果类商品全场 9 折"
+  },
+  {
+    "id": "act006",
+    "name": "肉制品 8.5 折",
+    "type": "category_discount",
+    "category": "肉制品",
+    "discountRate": 0.85,
+    "appliesTo": "category",
+    "startDate": "2026-06-01",
+    "endDate": "2026-09-30",
+    "description": "牛肉干/鸭脖/凤爪等肉制品 8.5 折"
+  },
+  {
+    "id": "act007",
+    "name": "饼干糕点第二件半价",
+    "type": "second_half",
+    "category": "饼干糕点",
+    "appliesTo": "category",
+    "startDate": "2026-07-01",
+    "endDate": "2026-08-31",
+    "description": "饼干糕点类第二件半价（结算时自动折扣）"
+  },
+  {
+    "id": "act008",
+    "name": "新客立减 5 元",
+    "type": "new_user",
+    "discount": 5,
+    "appliesTo": "new_user",
+    "startDate": "2025-01-01",
+    "endDate": "2026-12-31",
+    "description": "新客首单立减 5 元"
+  },
+  {
+    "id": "act009",
+    "name": "新客首单包邮",
+    "type": "new_user_shipping",
+    "appliesTo": "new_user",
+    "startDate": "2025-01-01",
+    "endDate": "2026-12-31",
+    "description": "新客首单免运费（无门槛）"
+  },
+  {
+    "id": "act010",
+    "name": "下午茶专场（14-17 点）",
+    "type": "flash_sale",
+    "appliesTo": "scenario",
+    "scenario": "下午茶",
+    "discountRate": 0.88,
+    "startDate": "2026-07-01",
+    "endDate": "2026-09-30",
+    "timeWindow": "14:00-17:00",
+    "description": "工作日 14-17 点下午茶专区 8.8 折"
+  },
+  {
+    "id": "act011",
+    "name": "周末追剧零食包",
+    "type": "bundle",
+    "bundleId": "bundle_weekend",
+    "discount": 20,
+    "appliesTo": "bundle",
+    "startDate": "2026-07-01",
+    "endDate": "2026-12-31",
+    "description": "鸭脖+魔芋爽+薯片追剧组合包，立减 20 元"
+  },
+  {
+    "id": "act012",
+    "name": "会员日 88 折（每月 8 号）",
+    "type": "member_day",
+    "discountRate": 0.88,
+    "appliesTo": "member",
+    "startDate": "2026-01-01",
+    "endDate": "2026-12-31",
+    "description": "每月 8 号会员日全场 88 折，与优惠券叠加"
+  }
+]

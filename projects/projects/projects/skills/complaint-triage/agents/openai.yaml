@@ -1,0 +1,18 @@
+name: 投诉分流
+description: 识别投诉严重程度并分流：严重投诉（异物/食品安全）走人工，一般投诉（口感/包装）走普通售后。
+version: 1.0.0
+model: doubao-seed-2-0-mini-260215
+temperature: 0.1
+maxTokens: 500
+input_schema:
+  type: object
+  required: [complaint]
+  properties:
+    complaint: { type: string }
+output_schema:
+  type: object
+  required: [severity, route]
+  properties:
+    severity: { type: string, enum: [low, medium, high, critical] }
+    route: { type: string, enum: [self_service, after_sales, human_handoff] }
+    reason: { type: string }

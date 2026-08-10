@@ -1,0 +1,19 @@
+name: 过敏风险提醒
+description: 检测用户提到的过敏原，对比商品配料表，给出风险提示和安全替代建议。
+version: 1.0.0
+model: doubao-seed-2-0-mini-260215
+temperature: 0.2
+maxTokens: 600
+input_schema:
+  type: object
+  required: [allergy, products]
+  properties:
+    allergy: { type: string }
+    products: { type: array }
+output_schema:
+  type: object
+  required: [riskFound, warnings]
+  properties:
+    riskFound: { type: boolean }
+    warnings: { type: array, items: { type: string } }
+    safeAlternatives: { type: array, items: { type: string } }
