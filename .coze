@@ -1,0 +1,25 @@
+[project]
+sub_id = "7bb774d7"
+name = "snackops-agent-platform"
+requires = ["nodejs-24"]
+project_type = "web"
+version = "0.0.32"
+
+[preview]
+preview_enable = "enabled"
+
+[dev]
+build = ["bash", "projects/projects/projects/projects/scripts/coze-preview-build.sh"]
+run = ["bash", "projects/projects/projects/projects/scripts/coze-preview-run.sh"]
+validate = ["bash", "projects/projects/projects/projects/scripts/validate.sh"]
+
+[deploy]
+build = ["bash", "projects/projects/projects/projects/scripts/build.sh"]
+run = ["bash", "projects/projects/projects/projects/scripts/start.sh"]
+
+[deploy.profile]
+kind = "service"
+flavor = "web"
+
+[subprojects]
+path = ["projects/projects/projects/projects"]
