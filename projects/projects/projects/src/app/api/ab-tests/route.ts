@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
+import { atomicWriteText } from "@/lib/fs-atomic";
 
 const AB_FILE = path.join(process.cwd(), "data", "ab-tests.json");
 const AB_MOCK = path.join(process.cwd(), "scripts", "ab-test-mock.json");
@@ -13,7 +14,7 @@ async function ensureData() {
   } catch {
     // seed from mock json
     const raw = await fs.readFile(AB_MOCK, "utf-8");
-    await fs.writeFile(AB_FILE, JSON.stringify({ tests: JSON.parse(raw) }, null, 2), "utf-8");
+    await atomicWriteText(AB_FILE, JSON.stringify({ tests: JSON.parse(raw) }, null, 2));
   }
   const raw = await fs.readFile(AB_FILE, "utf-8");
   return JSON.parse(raw) as { tests: any[] };
@@ -65,7 +66,7 @@ export async function POST(req: Request) {
     goal: goal || "对比两个版本的实际效果",
   };
   data.tests.unshift(newTest);
-  await fs.writeFile(AB_FILE, JSON.stringify(data, null, 2), "utf-8");
+  await atomicWriteText(AB_FILE, JSON.stringify(data, null, 2));
   return NextResponse.json({ ok: true, test: newTest });
 }
 
@@ -82,6 +83,6 @@ export async function PATCH(req: Request) {
   if (status === "running" && !t.startedAt) t.startedAt = new Date().toISOString();
   if (status === "paused") t.pausedAt = new Date().toISOString();
   if (status === "completed") t.endedAt = new Date().toISOString();
-  await fs.writeFile(AB_FILE, JSON.stringify(data, null, 2), "utf-8");
+  await atomicWriteText(AB_FILE, JSON.stringify(data, null, 2));
   return NextResponse.json({ ok: true, test: data.tests[idx] });
 }

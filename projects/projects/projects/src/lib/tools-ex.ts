@@ -5,6 +5,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { randomUUID } from "crypto";
 import { readCatalog } from "./store";
+import { atomicWriteText } from "./fs-atomic";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 async function readData<T>(file: string, fallback: T): Promise<T> {
@@ -17,7 +18,7 @@ async function readData<T>(file: string, fallback: T): Promise<T> {
 }
 async function writeData<T>(file: string, data: T) {
   await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.writeFile(path.join(DATA_DIR, file), JSON.stringify(data, null, 2), "utf-8");
+  await atomicWriteText(path.join(DATA_DIR, file), JSON.stringify(data, null, 2));
 }
 
 /* ---------------- 1. 查询订单 ---------------- */

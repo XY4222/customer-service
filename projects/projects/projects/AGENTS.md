@@ -80,6 +80,14 @@ scripts/
 - **source 字段**：`user`（前台用户）/ `eval`（评测批次）/ `replay`（后台复跑），用于区分运行来源。
 - **自动降级**：当 `data/llm-config.json` 记录的 activeProvider 所需的密钥/SDK 环境变量缺失时（例如部署后选了 openai-compatible 但没配 OPENAI_API_KEY），`getRuntimeFallbackInfo()` 会自动降级到 `classroom-fixture`（演示稳定模式），并在所有页面顶部的黄色 RuntimeBanner 中显示原因与「去模型管理配置」按钮；`GET /api/runtime` 会返回 `fallback.degraded=true`、`fallback.reason` 等字段，供前端判断。降级发生时不会把 data 文件改掉，用户配好密钥后下次刷新即自动恢复。
 
+## 持久化写入规范（必须遵守）
+- **所有 data/*.json 与 skills/<id>/SKILL.md 的写入必须走原子写**：`src/lib/fs-atomic.ts` 的 `atomicWriteTextSync` / `atomicWriteText`（temp 文件 + `fs.rename`），禁止直接 `fs.writeFile`。
+  - 历史教训：多个 API 并发写同一 JSON 文件（如 skill-versions.json）时，非原子写会交错产生两份 JSON 拼接的损坏文件（`JSON.parse` 报 "Extra data"），且 rollbackSkillVersion 等读到坏文件直接 500。
+  - 已改造的写入点：skill-versions.ts、ab-tests/route.ts、ab-tests/simulate/route.ts、planner.ts、llm.ts、tools-ex.ts、skills-registry.ts、store.ts（3 处）、ratings/route.ts；store.ts 的 writeJsonFile 本就是原子模式。
+  - **新增任何持久化写入点时，一律 import fs-atomic**。
+- **读取无内存缓存**：store/registry 每次请求直接读磁盘文件，磁盘数据被外部修改（如 git checkout 恢复）后立即生效，无需重启服务。
+- **SSE 流式路由的步骤状态回写模式**（见 run/retry/route.ts）：degraded 状态在 onStepComplete 之后才能确定，需通过 `executePlan` 的 `onStepRecord` 回调回写 `newSteps`，不要在回调里引用尚未赋值的变量（TDZ）。
+
 ## LLM 模型
 - 统一通过 `src/lib/llm.ts` 调用，提供同步 `chat()` 与流式 `chatStream()` 两种接口
 - Provider 三选一：

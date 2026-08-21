@@ -5,6 +5,7 @@
  */
 import fs from "fs";
 import path from "path";
+import { atomicWriteTextSync } from "./fs-atomic";
 
 export interface SkillManifest {
   id: string;
@@ -101,7 +102,7 @@ export function readSkillFile(id: string): string | null {
 export function writeSkillFile(id: string, content: string) {
   const dir = path.join(SKILLS_ROOT, id);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(dir, "SKILL.md"), content);
+  atomicWriteTextSync(path.join(dir, "SKILL.md"), content);
 }
 
 /** Create a new skill folder + SKILL.md skeleton */

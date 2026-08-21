@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
+import { atomicWriteText } from "@/lib/fs-atomic";
 
 const AB_FILE = path.join(process.cwd(), "data", "ab-tests.json");
 const AB_MOCK = path.join(process.cwd(), "scripts", "ab-test-mock.json");
@@ -12,7 +13,7 @@ async function ensureData() {
     await fs.access(AB_FILE);
   } catch {
     const raw = await fs.readFile(AB_MOCK, "utf-8");
-    await fs.writeFile(AB_FILE, JSON.stringify({ tests: JSON.parse(raw) }, null, 2), "utf-8");
+    await atomicWriteText(AB_FILE, JSON.stringify({ tests: JSON.parse(raw) }, null, 2));
   }
   return JSON.parse(await fs.readFile(AB_FILE, "utf-8")) as { tests: any[] };
 }
@@ -163,6 +164,6 @@ export async function POST(req: Request) {
     t._autoHint = bBetter ? "B 组显著领先，可宣布 B 胜出" : "A 组显著领先，可保留 A 为基线";
   }
 
-  await fs.writeFile(AB_FILE, JSON.stringify(data, null, 2), "utf-8");
+  await atomicWriteText(AB_FILE, JSON.stringify(data, null, 2));
   return NextResponse.json({ ok: true, test: t, added: samples });
 }

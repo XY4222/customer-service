@@ -10,6 +10,7 @@
  */
 
 import fs from "fs";
+import { atomicWriteTextSync } from "./fs-atomic";
 import { promises as fsp } from "fs";
 import path from "path";
 import type { LLMConfig, LLMProviderId } from "./llm-config";
@@ -38,7 +39,7 @@ function persistFallbackSync(state: FallbackState): void {
   _runtimeFallbackCache = state;
   try {
     fs.mkdirSync(path.dirname(FALLBACK_FILE), { recursive: true });
-    fs.writeFileSync(FALLBACK_FILE, JSON.stringify(state, null, 2), "utf-8");
+    atomicWriteTextSync(FALLBACK_FILE, JSON.stringify(state, null, 2));
   } catch {
     // 写入失败不阻塞主流程
   }

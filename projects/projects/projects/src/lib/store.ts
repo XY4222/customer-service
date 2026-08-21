@@ -4,6 +4,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { randomUUID } from "crypto";
+import { atomicWriteText, atomicWriteTextSync } from "./fs-atomic";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const SKILLS_DIR = path.join(process.cwd(), "skills");
@@ -151,7 +152,7 @@ export async function saveSkill(doc: SkillDoc): Promise<void> {
   const dir = path.join(SKILLS_DIR, doc.meta.id);
   await fs.mkdir(dir, { recursive: true });
   const target = path.join(dir, "SKILL.md");
-  await fs.writeFile(target, stringifyFrontmatter(doc), "utf-8");
+  await atomicWriteText(target, stringifyFrontmatter(doc));
 }
 
 export async function createSkill(id: string, name: string, systemPrompt: string, model = "doubao-seed-2-0-mini-260215"): Promise<SkillDoc> {
@@ -601,7 +602,7 @@ export function appendRating(payload: {
     /* ignore */
   }
   data.ratings.unshift(rec);
-  require("fs").writeFileSync(file, JSON.stringify(data, null, 2));
+  atomicWriteTextSync(file, JSON.stringify(data, null, 2));
   if (payload.rating === 1) {
     const impFile = path.join(DATA_DIR, "improvements.json");
     let imps: { improvements: Improvement[] } = { improvements: [] };
@@ -621,7 +622,7 @@ export function appendRating(payload: {
       status: "open",
       createdAt: new Date().toISOString(),
     });
-    require("fs").writeFileSync(impFile, JSON.stringify(imps, null, 2));
+    atomicWriteTextSync(impFile, JSON.stringify(imps, null, 2));
   }
   return rec;
 }

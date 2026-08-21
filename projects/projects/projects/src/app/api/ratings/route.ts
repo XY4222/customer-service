@@ -54,8 +54,9 @@ export async function POST(req: Request) {
       messages: body.messages ?? [],
     });
     // 追加 question/reply/comment 到写回的记录（appendRating 只写基础字段，这里补充）
-    const fs = await import("fs");
     const path = await import("path");
+    const fs = await import("fs");
+    const { atomicWriteTextSync } = await import("@/lib/fs-atomic");
     const file = path.join(process.cwd(), "data", "ratings.json");
     try {
       const raw = fs.readFileSync(file, "utf-8");
@@ -68,7 +69,7 @@ export async function POST(req: Request) {
         target.reply = reply;
         target.comment = body.comment;
         target.score = score;
-        fs.writeFileSync(file, JSON.stringify(data, null, 2));
+        atomicWriteTextSync(file, JSON.stringify(data, null, 2));
       }
     } catch {}
     return NextResponse.json({ ok: true, id: record.id });

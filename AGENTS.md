@@ -69,3 +69,5 @@
 - Next.js 多 lockfile 警告：可忽略，不影响功能
 - url.parse() deprecation warning：Node.js 内置行为，不影响功能
 - validate.sh 依赖 COZE_WORKSPACE_PATH 环境变量，本地运行需确保正确
+- **路径体系**（预览问题根因，勿再踩）：git root 即工作区根 `/workspace/projects`（目录名本身是 projects），技术项目 tracked 于相对路径 `projects/projects/projects/`（绝对路径 4 个 projects 段）。根 `.coze` 的 `[dev]`/`[deploy]` 相对路径以工作区根为基准解析，必须是 3 段 `projects/projects/projects/scripts/...`——多写一层平台执行器就找不到脚本，预览直接起不来。
+- **test_run 管线行为**：命令数组是**并行执行**的，有依赖关系的命令（尤其写同一 data 文件的）必须用 `&&` 串联成单条命令字符串实现串行化，否则会 404 竞态或并发写坏 JSON 文件。管线会把 curl 重写为追加 `-w '\nHTTP_CODE:%{http_code}'`，curl 对 HTTP 错误码仍 exit 0；stdout 重定向到文件的 body 会被 HTTP_CODE 尾巴污染，构造复杂请求体时用 python 从 data 源文件生成。

@@ -66,17 +66,20 @@ export async function POST(req: NextRequest) {
             onStepComplete: (idx: number, output: unknown) => {
               const planStep = retryPlan.steps[idx];
               const s = newSteps.find((st) => (st.stepIndex as number) === startIdx + idx);
-              let status: "success" | "degraded" = "success";
               if (s) {
                 s.output = output as any;
-                s.status = status;
+                s.status = "success";
                 s.finishedAt = new Date().toISOString();
               }
-              // degraded 需要遍历 result.steps 判定
-              const execStep = (result as any).steps?.[idx];
-              if (execStep?.status === "degraded") status = "degraded";
-              send("step_output", { stepIndex: startIdx + idx, step: startIdx + idx, type: planStep?.type, ref: planStep?.ref, output, status });
-              send("step_completed", { stepIndex: startIdx + idx, step: startIdx + idx, type: planStep?.type, ref: planStep?.ref, output, status });
+              send("step_output", { stepIndex: startIdx + idx, step: startIdx + idx, type: planStep?.type, ref: planStep?.ref, output, status: "success" });
+              send("step_completed", { stepIndex: startIdx + idx, step: startIdx + idx, type: planStep?.type, ref: planStep?.ref, output, status: "success" });
+            },
+            // degraded 状态在 onStepComplete 之后才能确定，由 onStepRecord 回写
+            onStepRecord: (idx: number, rec: any) => {
+              if (rec?.status === "degraded") {
+                const s = newSteps.find((st) => (st.stepIndex as number) === startIdx + idx);
+                if (s) s.status = "degraded";
+              }
             },
             onStepError: (idx: number, err: Error | string) => {
               const planStep = retryPlan.steps[idx];

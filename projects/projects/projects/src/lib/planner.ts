@@ -1,6 +1,7 @@
 import { callLLM } from "./llm";
 import { listSkills, type SkillManifest } from "./skills-registry";
 import { getToolCatalog } from "./tools";
+import { atomicWriteTextSync } from "./fs-atomic";
 import fs from "fs";
 import path from "path";
 
@@ -77,7 +78,7 @@ export function writePlannerConfig(cfg: Partial<PlannerConfig>) {
   const cur = readPlannerConfig();
   const next = { ...cur, ...cfg };
   fs.mkdirSync(path.dirname(PLANNER_CONFIG_PATH), { recursive: true });
-  fs.writeFileSync(PLANNER_CONFIG_PATH, JSON.stringify(next, null, 2));
+  atomicWriteTextSync(PLANNER_CONFIG_PATH, JSON.stringify(next, null, 2));
   return next;
 }
 

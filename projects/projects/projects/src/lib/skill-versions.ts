@@ -6,6 +6,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { randomUUID } from "crypto";
 import { readSkillFile, writeSkillFile } from "./skills-registry";
+import { atomicWriteText } from "./fs-atomic";
 
 const VERSIONS_FILE = path.join(process.cwd(), "data", "skill-versions.json");
 
@@ -34,7 +35,7 @@ async function loadVersions(): Promise<VersionsStore> {
 }
 
 async function saveVersions(store: VersionsStore) {
-  await fs.writeFile(VERSIONS_FILE, JSON.stringify(store, null, 2), "utf-8");
+  await atomicWriteText(VERSIONS_FILE, JSON.stringify(store, null, 2));
 }
 
 /** 写入 SKILL.md 前自动存一份快照（与最近一条完全一致会被去重） */
