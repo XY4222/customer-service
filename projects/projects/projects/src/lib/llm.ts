@@ -11,6 +11,7 @@
 
 import fs from "fs";
 import { atomicWriteTextSync } from "./fs-atomic";
+import { detectHandoffSignals } from "./handoff-rules";
 import { promises as fsp } from "fs";
 import path from "path";
 import type { LLMConfig, LLMProviderId } from "./llm-config";
@@ -419,9 +420,11 @@ async function callOpenAICompatible(opts: CallLLMOptions): Promise<string> {
 }
 
 /**
- * 演示稳定模式：根据 userPrompt 中出现的关键词启发式返回结构化结果，
- * 覆盖 need-extraction / product-recommendation / response-generator / risk-check / reason-writer
- * 等核心 Skill 所需的固定输出形态，保证 Eval 闭环可完整跑通，但不冒充真实模型。
+ * 演示稳定模式：根据 systemPrompt（SKILL.md 的 frontmatter + 正文）识别当前 Skill，
+ * 返回 need-extraction / recommendation-decision / recommendation-reason /
+ * response-generator / risk-check 等核心 Skill 所需的固定输出形态，
+ * 保证 Eval 闭环与课堂演示可完整跑通，但不冒充真实模型。
+ * 注意：不处理「生成计划」——Planner 的计划由 planner.ts 的 fallbackPlan() 提供。
  */
 async function callClassroomFixture(opts: CallLLMOptions): Promise<string> {
   const sys = opts.systemPrompt || "";
@@ -433,27 +436,26 @@ async function callClassroomFixture(opts: CallLLMOptions): Promise<string> {
   const skillId = idMatch ? idMatch[1].toLowerCase() : "";
 
   // 判定当前是哪个 Skill：优先用 skill id，其次再用关键字兜底
-  const isPlanner = skillId === "planner" || /planner|生成计划|plan|步骤/i.test(sys) && !skillId;
+  //
+  // 注意：这里没有 Planner 分支——planner.ts 调用 callLLM 时 systemPrompt 为空，
+  // 本函数按 systemPrompt 识别能力，因此“生成计划”永远走不到 fixture；
+  // 演示稳定模式下的计划由 planner.ts 的 fallbackPlan() 提供（确定性 9 步）。
   const isRisk = skillId === "risk-check" || /风控|risk|合规|审核/i.test(sysLower) && !skillId;
   const isRequirement = skillId === "need-extraction" || /need-extraction|需求结构化|intent.*提取/i.test(sys);
   const isRecommend = skillId === "recommendation-decision" || /recommendation-decision|商品推荐决策|selectedProductIds/i.test(sys);
   const isReason = skillId === "recommendation-reason" || /recommendation-reason|推荐理由生成|sellingPoints/i.test(sys);
   const isScript = skillId === "response-generator" || /response-generator|生成客服回复|生成.*话术/i.test(sys);
+  const isHandoff = skillId === "human-handoff-decision" || /human-handoff-decision|人工接管判断/i.test(sys);
 
-  if (isPlanner) {
+  // 转人工判定：确定性规则（关键词命中即转人工），保证无模型时课堂演示可复现
+  if (isHandoff) {
+    const hits = detectHandoffSignals(q);
+    const needsHuman = hits.length > 0;
     return JSON.stringify({
-      reasoning: "演示稳定模式默认计划",
-      steps: [
-        { id: "s1", type: "skill", ref: "need-extraction", description: "需求结构化" },
-        { id: "s2", type: "tool", ref: "query_products", description: "查询商品" },
-        { id: "s3", type: "tool", ref: "query_activities", description: "查询活动" },
-        { id: "s4", type: "tool", ref: "query_coupons", description: "查询优惠券" },
-        { id: "s5", type: "skill", ref: "product-recommendation", description: "推荐决策" },
-        { id: "s6", type: "tool", ref: "calculate_price", description: "价格计算" },
-        { id: "s7", type: "skill", ref: "reason-writer", description: "卖点理由" },
-        { id: "s8", type: "skill", ref: "response-generator", description: "生成话术" },
-        { id: "s9", type: "skill", ref: "risk-check", description: "风控审核" },
-      ],
+      needsHuman,
+      reason: needsHuman ? `命中转人工信号：${hits.join("、")}` : "未命中转人工信号，可由 AI 继续接待",
+      urgency: needsHuman ? "high" : "low",
+      handoffMessage: needsHuman ? "已经帮您转接人工客服，稍后由专员跟进处理，请您稍等。" : null,
     });
   }
 

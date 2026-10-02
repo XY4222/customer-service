@@ -1,0 +1,53 @@
+{
+  "visitorId": "cu_zhouqiang",
+  "createdAt": "2026-09-22T05:00:00.000Z",
+  "updatedAt": "2026-09-29T02:00:00.000Z",
+  "isNewUser": false,
+  "interactionCount": 3,
+  "facts": [
+    {
+      "kind": "preference",
+      "content": "喜欢巧克力，尤其黑巧",
+      "sourceRunId": "run_seed70s490",
+      "updatedAt": "2026-09-29T02:00:00.000Z"
+    },
+    {
+      "kind": "preference",
+      "content": "关注配料表，偏好高可可含量",
+      "sourceRunId": "run_seed70s490",
+      "updatedAt": "2026-09-29T02:00:00.000Z"
+    },
+    {
+      "kind": "budget",
+      "content": "巧克力预算约60元",
+      "sourceRunId": "run_seed70s490",
+      "updatedAt": "2026-09-29T02:00:00.000Z"
+    },
+    {
+      "kind": "identity",
+      "content": "老客，黑巧复购3次",
+      "sourceRunId": "run_seed70s490",
+      "updatedAt": "2026-09-29T02:00:00.000Z"
+    }
+  ],
+  "episodes": [
+    {
+      "runId": "run_seed70s490",
+      "question": "黑巧还有货吗，老规矩来一盒",
+      "summary": "老客第3次复购黑巧克力",
+      "products": [
+        "70%黑巧克力"
+      ],
+      "ts": "2026-09-29T02:00:00.000Z"
+    },
+    {
+      "runId": "run_seed71t497",
+      "question": "有没有可可含量高点的巧克力，太甜的不要",
+      "summary": "首咨高可可巧克力，偏好明确",
+      "products": [
+        "70%黑巧克力"
+      ],
+      "ts": "2026-09-22T05:00:00.000Z"
+    }
+  ]
+}

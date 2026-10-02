@@ -1,6 +1,8 @@
-import { callLLM } from "./llm";
+import { callLLM, isFixtureMode } from "./llm";
 import { listSkills, type SkillManifest } from "./skills-registry";
 import { getToolCatalog } from "./tools";
+import { listToolConfigs } from "./store";
+
 import { atomicWriteTextSync } from "./fs-atomic";
 import fs from "fs";
 import path from "path";
@@ -128,19 +130,30 @@ export function fallbackPlan(): Plan {
   };
 }
 
-/** 生成计划：history 为多轮历史 */
+/** 生成计划：history 为多轮历史；memoryContext 为跨会话长期记忆（可选） */
 export async function generatePlan(params: {
   question: string;
   history?: { role: "user" | "assistant"; content: string }[];
+  memoryContext?: string;
 }): Promise<Plan> {
-  const { question, history = [] } = params;
+  return computePlan(params);
+}
+
+async function computePlan(params: {
+  question: string;
+  history?: { role: "user" | "assistant"; content: string }[];
+  memoryContext?: string;
+}): Promise<Plan> {
+  const { question, history = [], memoryContext = "" } = params;
   const cfg = readPlannerConfig();
-  if (!cfg.enabled) return fallbackPlan();
+  if (!cfg.enabled) {
+    return { ...fallbackPlan(), reasoning: "Planner 已停用，使用确定性兜底计划" };
+  }
 
   const skills = listSkills();
-  const tools = getToolCatalog();
 
-  // 风控 skill 必须存在且启用
+  // 风控 skill 必须存在且启用——放在 fixture 短路之前，保证"风控未启用则拒绝生成回复"这条
+  // 安全不变量对两条路径都成立
   const riskSkill = skills.find((s) => s.id === "risk-check");
   if (!riskSkill || !riskSkill.enabled) {
     return {
@@ -150,10 +163,29 @@ export async function generatePlan(params: {
     };
   }
 
+  // 演示稳定模式没有可用的规划模型：直接返回确定性兜底计划。
+  // （fixture 按 systemPrompt 识别能力，而 Planner 调用时传的是空 systemPrompt，
+  //   所以硬走模型只会拿到通用兜底话术并打出“JSON parse failed”的误导日志。）
+  if (isFixtureMode()) {
+    return {
+      ...fallbackPlan(),
+      reasoning: "演示稳定模式（classroom-fixture）：使用确定性兜底计划，不调用模型",
+    };
+  }
+
+  // 工具启停以 tools-config.json 为准：getToolCatalog 只描述工具本身（并硬编码 enabled=true），
+  // 不掌握真实启停状态，直接用它会让 Planner 看到被禁用的工具。
+  const toolConfigs = await listToolConfigs();
+  const availableToolIds = new Set(toolConfigs.filter((t) => t.enabled).map((t) => t.id));
+  const tools = getToolCatalog().map((t) => ({ ...t, enabled: availableToolIds.has(t.id) }));
+
   const prompt = `${cfg.systemPrompt}
 
 ## 可用能力
 ${capabilitiesBlock(skills, tools)}
+
+## 用户长期记忆（跨会话画像，规划时参考）
+${memoryContext || "（暂无历史记忆）"}
 
 ## 多轮历史（最近 6 轮）
 ${history
@@ -184,9 +216,9 @@ ${question}
     if (!parsed || !Array.isArray(parsed.steps) || parsed.steps.length === 0) {
       return fallbackPlan();
     }
-    // 校验引用合法性
+    // 校验引用合法性：未注册或未启用的能力一律丢弃（注意：这里会静默丢步，改动技能/工具后请跑 pnpm audit:capabilities）
     const enabledSkillIds = new Set(skills.filter((s) => s.enabled).map((s) => s.id));
-    const enabledToolIds = new Set(tools.filter((t) => t.enabled).map((t) => t.id));
+    const enabledToolIds = availableToolIds;
     const validSteps = parsed.steps
       .map((s: any, i: number) => ({ ...s, step: s.step || i + 1 }))
       .filter(

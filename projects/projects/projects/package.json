@@ -3,15 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack -p 5000",
+    "dev": "node scripts/dev.mjs",
     "build": "next build --webpack",
     "start": "next start -p 5000",
     "lint": "eslint . --max-warnings=50",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "ts-check": "tsc -p tsconfig.json --noEmit",
-    "validate": "pnpm run --parallel '/^(typecheck|lint)$/'",
+    "validate": "pnpm typecheck && pnpm lint",
     "classroom:reset": "node scripts/classroom-reset.mjs",
-    "classroom:dev": "node scripts/classroom-dev.mjs"
+    "classroom:dev": "node scripts/dev.mjs",
+    "memory:seed": "tsx scripts/seed-memory.ts",
+    "memory:test": "tsx scripts/test-memory.ts",
+    "audit:capabilities": "tsx scripts/audit-capabilities.ts",
+    "handoff:test": "tsx scripts/test-handoff.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.958.0",

@@ -1,0 +1,68 @@
+{
+  "visitorId": "cu_wangmeili",
+  "createdAt": "2026-09-16T08:00:00.000Z",
+  "updatedAt": "2026-09-30T02:00:00.000Z",
+  "isNewUser": false,
+  "interactionCount": 4,
+  "facts": [
+    {
+      "kind": "preference",
+      "content": "喜欢麻辣口味零食",
+      "sourceRunId": "run_seed10k70",
+      "updatedAt": "2026-09-30T02:00:00.000Z"
+    },
+    {
+      "kind": "preference",
+      "content": "偏好魔芋类脆弹口感",
+      "sourceRunId": "run_seed10k70",
+      "updatedAt": "2026-09-30T02:00:00.000Z"
+    },
+    {
+      "kind": "scenario",
+      "content": "常在办公室吃零食",
+      "sourceRunId": "run_seed10k70",
+      "updatedAt": "2026-09-30T02:00:00.000Z"
+    },
+    {
+      "kind": "budget",
+      "content": "零食预算约30元",
+      "sourceRunId": "run_seed10k70",
+      "updatedAt": "2026-09-30T02:00:00.000Z"
+    },
+    {
+      "kind": "identity",
+      "content": "老客，多次复购辣味魔芋爽",
+      "sourceRunId": "run_seed10k70",
+      "updatedAt": "2026-09-30T02:00:00.000Z"
+    }
+  ],
+  "episodes": [
+    {
+      "runId": "run_seed10k70",
+      "question": "上次买的魔芋爽吃完了，再囤两包",
+      "summary": "老客回购辣味魔芋爽，一次买了两包",
+      "products": [
+        "辣味魔芋爽"
+      ],
+      "ts": "2026-09-30T02:00:00.000Z"
+    },
+    {
+      "runId": "run_seed11l77",
+      "question": "办公室下午馋了，有没有麻辣味的推荐",
+      "summary": "推荐辣味魔芋爽，用户预算30元内满意下单",
+      "products": [
+        "辣味魔芋爽"
+      ],
+      "ts": "2026-09-23T05:00:00.000Z"
+    },
+    {
+      "runId": "run_seed12m84",
+      "question": "我想买点办公室零食，要麻辣口味的，预算30元左右",
+      "summary": "首次咨询办公室麻辣零食，客服推荐魔芋爽",
+      "products": [
+        "辣味魔芋爽"
+      ],
+      "ts": "2026-09-16T08:00:00.000Z"
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import { listEnabledSkills } from "@/lib/skills-registry";
 import { listToolConfigs, saveRun, type RunRecord, type StepRecord } from "@/lib/store";
 import { randomId } from "@/lib/utils";
 import type { Plan } from "@/lib/planner";
+import { readProfile, buildMemoryContext, updateMemoryAfterRun, sanitizeVisitorId } from "@/lib/memory";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -13,6 +14,8 @@ interface Message { role: "user" | "assistant"; content: string; }
 interface AgentBody {
   question?: string;
   history?: Message[];
+  conversationHistory?: Message[]; // 前端实际发送的字段名（兼容）
+  visitorId?: string;
   source?: "user" | "eval" | "demo" | "replay";
   evalCaseId?: string;
   evalBatchId?: string;
@@ -39,7 +42,18 @@ function stepToRecord(step: any, idx: number, planSteps: Plan["steps"]): StepRec
 
 export async function POST(req: NextRequest) {
   const body = (await req.json()) as AgentBody;
-  const { question = "", history = [], source = "user", evalCaseId, evalBatchId } = body;
+  const {
+    question = "",
+    history: historyField,
+    conversationHistory,
+    visitorId: rawVisitorId,
+    source = "user",
+    evalCaseId,
+    evalBatchId,
+  } = body;
+  // 前端发送 conversationHistory；老字段 history 兼容保留
+  const history = conversationHistory ?? historyField ?? [];
+  const visitorId = sanitizeVisitorId(rawVisitorId);
 
   if (!question.trim()) {
     return new Response(JSON.stringify({ error: "question is required" }), { status: 400 });
@@ -66,15 +80,36 @@ export async function POST(req: NextRequest) {
       let clarificationQuestion: string | null = null;
       let handoffToHuman = false;
       let handoffMessage: string | null = null;
+      let handoffReason: string | null = null;
       const skillsUsed: string[] = [];
       const toolsUsed: string[] = [];
 
       try {
         send("run_started", { runId });
 
+        // ---- 长期记忆召回（跨会话画像） ----
+        let memoryProfile: Awaited<ReturnType<typeof readProfile>> = null;
+        let memoryContext = "";
+        try {
+          memoryProfile = visitorId ? await readProfile(visitorId) : null;
+          memoryContext = buildMemoryContext(memoryProfile);
+        } catch {
+          memoryContext = "";
+        }
+        if (visitorId) {
+          send("memory_recalled", {
+            visitorId,
+            hasProfile: !!memoryProfile,
+            interactionCount: memoryProfile?.interactionCount ?? 0,
+            isNewUser: memoryProfile?.isNewUser ?? true,
+            facts: (memoryProfile?.facts ?? []).slice(0, 10).map((f) => ({ kind: f.kind, content: f.content })),
+            recentEpisodes: (memoryProfile?.episodes ?? []).slice(0, 3).map((e) => ({ summary: e.summary, ts: e.ts })),
+          });
+        }
+
         // Step 0: Planner
         send("planner_thinking", { thought: "Planner 正在分析可用能力..." });
-        plan = await generatePlan({ question, history: fullHistory });
+        plan = await generatePlan({ question, history: fullHistory, memoryContext });
         reasoning = plan.reasoning ?? "";
         send("plan_ready", { plan });
         send("plan_done", { plan });
@@ -87,6 +122,7 @@ export async function POST(req: NextRequest) {
           plan,
           question,
           history: fullHistory,
+          memoryContext,
           availableSkills: listEnabledSkills().map((s) => s.id),
           availableTools: (await listToolConfigs()).filter((t) => t.enabled).map((t) => t.id),
           onStepStart: (idx, input, _thinking, meta) => {
@@ -127,6 +163,7 @@ export async function POST(req: NextRequest) {
         clarificationQuestion = (result as any).clarificationQuestion ?? null;
         handoffToHuman = !!(result as any).handoffToHuman;
         handoffMessage = (result as any).handoffMessage ?? null;
+        handoffReason = (result as any).handoffReason ?? null;
 
         send("final_reply", {
           finalReply,
@@ -166,12 +203,30 @@ export async function POST(req: NextRequest) {
         finishedAt,
         durationMs: totalDuration,
         handoffToHuman,
+        handoffReason: handoffReason ?? undefined,
         needsClarification,
         createdAt: startedAt,
         updatedAt: finishedAt,
       };
       await saveRun(runRecord);
       send("run_saved", { runId });
+
+      // ---- 长期记忆提取（异步、不阻塞 SSE 收尾；失败静默） ----
+      // user = Agent 控制台；demo = 聊天 Demo 页（同一个真实访客，都应写记忆）
+      // eval / replay 是评测与复跑，不写记忆避免污染画像
+      if (visitorId && finalReply && (source === "user" || source === "demo")) {
+        void updateMemoryAfterRun({
+          visitorId,
+          runId,
+          input: {
+            question,
+            finalReply,
+            needExtraction: steps.find((s) => s.ref === "need-extraction")?.output as Record<string, unknown> | undefined,
+            products: collectProductNames(steps),
+          },
+        }).catch(() => {});
+      }
+
       send("done", { runId, status: finalStatus, durationMs: totalDuration });
       controller.close();
     },
@@ -185,4 +240,25 @@ export async function POST(req: NextRequest) {
       "X-Accel-Buffering": "no",
     },
   });
+}
+
+/** 从执行轨迹的 query_products / calculate_price 步骤里收集本次涉及的商品名 */
+function collectProductNames(steps: StepRecord[]): string[] {
+  const names = new Set<string>();
+  for (const s of steps) {
+    if (s.status !== "success" && s.status !== "degraded") continue;
+    const out = s.output as any;
+    if (!out || typeof out !== "object") continue;
+    if (Array.isArray(out.products)) {
+      for (const p of out.products as any[]) {
+        if (p?.name) names.add(String(p.name));
+      }
+    }
+    if (Array.isArray(out.items)) {
+      for (const it of out.items as any[]) {
+        if (it?.productName) names.add(String(it.productName));
+      }
+    }
+  }
+  return [...names].slice(0, 8);
 }

@@ -1,5 +1,6 @@
 import { listSkills } from "./skills-registry";
 import { runTool, type ToolId, getToolCatalog } from "./tools";
+import { detectHandoffSignals } from "./handoff-rules";
 import { readPlannerConfig, type Plan, type PlanStep } from "./planner";
 import { callLLM } from "./llm";
 import type { StepRecord } from "./store";
@@ -37,6 +38,8 @@ export interface ExecutePlanInput {
   plan: Plan;
   question: string;
   history?: { role: "user" | "assistant"; content: string }[];
+  /** 跨会话长期记忆上下文（注入 globals.memory，供 {{memory}} 占位符引用） */
+  memoryContext?: string;
   availableSkills: string[];
   availableTools: string[];
 }
@@ -68,6 +71,8 @@ export interface ExecutionResult {
   clarificationQuestion?: string | null;
   handoffToHuman?: boolean;
   handoffMessage?: string | null;
+  /** 转人工原因（来自 human-handoff-decision 的输出，供坐席工作台展示） */
+  handoffReason?: string | null;
   error?: string;
 }
 
@@ -269,7 +274,7 @@ type PlanShape = ExecutePlanInput["plan"];
 export async function executePlan(
   opts: ExecutePlanInput & ExecutorCallbacks,
 ): Promise<ExecutionResult> {
-  const { plan: rawPlan, question, history = [], availableSkills, availableTools } = opts;
+  const { plan: rawPlan, question, history = [], memoryContext = "", availableSkills, availableTools } = opts;
   const plannerCfg = readPlannerConfig();
 
   // 兜底：planner (LLM) 有时漏掉 response-generator 步骤，补上以保证有 finalReply
@@ -299,13 +304,14 @@ export async function executePlan(
   }
 
   const stepsOut: Record<number, any> = {};
-  const globals: Record<string, unknown> = { question, history };
+  const globals: Record<string, unknown> = { question, history, memory: memoryContext || "（暂无历史记忆）" };
   let finalReply = "";
   let riskResult: ExecutionResult["riskResult"] = null;
   let needsClarification = false;
   let clarificationQuestion: string | null = null;
   let handoffToHuman = false;
   let handoffMessage: string | null = null;
+  let handoffReason: string | null = null;
   let execError = "";
 
   // 判定一段文本是否是 LLM 自己"瞎编的 meta 报错"（非真实客服回复）
@@ -356,6 +362,12 @@ export async function executePlan(
     }
 
     const resolvedInput = resolvePlaceholder({ ...t.input }, stepsOut, globals) as Record<string, unknown>;
+    // 长期记忆自动注入：需求结构化与最终话术两个关键 skill 感知用户画像
+    if (memoryContext && t.type === "skill" && (t.ref === "need-extraction" || t.ref === "response-generator")) {
+      if (!("memory" in resolvedInput)) {
+        resolvedInput.memory = memoryContext;
+      }
+    }
     t.input = resolvedInput;
     opts.onStepStart?.(i, resolvedInput, undefined, { type: t.type, ref: t.ref });
 
@@ -375,6 +387,7 @@ export async function executePlan(
           if (t.ref === "human-handoff-decision" && (output as any).needsHuman) {
             handoffToHuman = true;
             handoffMessage = (output as any).handoffMessage || "已为您转接人工客服，请稍候。";
+            handoffReason = (output as any).reason || "AI 判定需要人工介入";
           }
           if (t.ref === "risk-check") {
             riskResult = {
@@ -507,6 +520,18 @@ export async function executePlan(
     }
   }
 
+  // 确定性转人工：命中关键词即标记「待人工」，不依赖模型自觉规划 human-handoff-decision。
+  // 不改动计划、也不覆盖 AI 已生成的回复（只在没有对外回复时才用接管话术），
+  // 因此不影响 Eval 口径；坐席工作台据此把会话列为待处理。
+  if (!handoffToHuman) {
+    const hits = detectHandoffSignals(question);
+    if (hits.length > 0) {
+      handoffToHuman = true;
+      handoffReason = `命中转人工关键词：${hits.join("、")}`;
+      handoffMessage = "已经帮您转接人工客服，稍后由专员跟进处理，请您稍等。";
+    }
+  }
+
   // Final reply fallback
   if (!finalReply) {
     if (needsClarification && clarificationQuestion) {
@@ -555,6 +580,7 @@ export async function executePlan(
     clarificationQuestion,
     handoffToHuman,
     handoffMessage,
+    handoffReason,
     error: execError || undefined,
   };
 }

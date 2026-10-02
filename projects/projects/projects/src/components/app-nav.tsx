@@ -15,6 +15,8 @@ import {
   X,
   Sparkles,
   Cpu,
+  Brain,
+  UserRound,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -25,6 +27,8 @@ const NAV_ITEMS = [
   { href: "/planner", label: "Planner", icon: GitBranch, section: "配置" },
   { href: "/models", label: "模型管理", icon: Cpu, section: "配置" },
   { href: "/ops", label: "运营中心", icon: BarChart3, section: "运营" },
+  { href: "/handoff", label: "坐席工作台", icon: UserRound, section: "运营" },
+  { href: "/memory", label: "记忆管理", icon: Brain, section: "运营" },
   { href: "/catalog", label: "数据中心", icon: Database, section: "运营" },
 ];
 

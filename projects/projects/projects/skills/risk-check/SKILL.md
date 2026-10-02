@@ -6,9 +6,6 @@ temperature: 0.1
 maxTokens: 500
 enabled: true
 requiredTools: []
-description: 严格审核客服回复是否合规。检查维度：
-effectiveModel: deepseek-v4-pro
-modelTranslated: true
 ---
 
 # 风控审核 (risk-check)
@@ -22,8 +19,6 @@ modelTranslated: true
 5. **安全提示**：涉及儿童/孕妇/过敏人群时必须有适当提示
 6. **态度合规**：不能对投诉/售后用户推诿或态度恶劣
 7. **隐私合规**：不能询问或输出手机号、地址、支付密码等敏感信息
-8. **彩票诈骗安全规则**
-- 遇到一等奖、中奖、兑奖、安全账户或转账，必须警告诈骗；不要转账或提供敏感信息；不要承诺兑奖；建议通过官方渠道核验。安全劝阻回复允许发送，诱导转账或承诺兑奖的危险回复才阻断。
 
 ## 输出 JSON
 ```json

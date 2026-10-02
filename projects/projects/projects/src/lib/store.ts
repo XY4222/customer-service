@@ -300,12 +300,33 @@ export interface RunRecord {
   handoffReason?: string;
   handoffIssues?: string[];
   handoffAt?: string;
+  /** 坐席代笔候选（只填不发：系统只起草，由坐席点选后自行在外部渠道发送） */
+  draftCandidates?: DraftCandidate[];
+  /** 候选是否来自规则模板兜底（模型失败/fixture 模式），UI 必须如实标注 */
+  draftUsedFallback?: boolean;
+  /** 坐席选中的候选 id；未选择时为 null */
+  selectedCandidateId?: string | null;
+  /** 留痕：谁选的、何时选的、何时由坐席标记发送 */
+  selectedBy?: string | null;
+  selectedAt?: string | null;
+  sentAt?: string | null;
   needsClarification?: boolean;
   clarificationQuestion?: string | null;
   evalBatchId?: string;
   evalCaseId?: string;
   evalPassed?: boolean;
   evalFailReason?: string;
+}
+
+/** 坐席代笔的一条候选话术（写入 RunRecord.draftCandidates） */
+export interface DraftCandidate {
+  id: string;
+  /** 策略标签，如「稳妥说明」「共情安抚」「简短推进」 */
+  style: string;
+  content: string;
+  /** 该候选的风险提示，供坐席发送前判断 */
+  riskNote: string;
+  riskLevel: "low" | "medium" | "high";
 }
 
 export async function readRuns(): Promise<{ runs: RunRecord[] }> {

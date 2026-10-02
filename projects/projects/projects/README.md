@@ -1,6 +1,6 @@
 # projects
 
-这是一个基于 [Next.js 16](https://nextjs.org) + [shadcn/ui](https://ui.shadcn.com) 的全栈应用项目，由扣子编程 CLI 创建。
+这是一个基于 [Next.js 16](https://nextjs.org) + [shadcn/ui](https://ui.shadcn.com) 的全栈零食电商客服 Agent 与 Eval 运营平台。
 
 ## 快速开始
 
@@ -27,26 +27,26 @@ pnpm build
 pnpm start
 ```
 
-### 第六课课堂演示
+### Eval 课堂基线
 
-每次上课前先执行：
+课堂或练习开始前先恢复干净基线：
 
 ```bash
 pnpm classroom:reset
-pnpm classroom:dev
+pnpm dev
 ```
 
-然后进入 `/ops` 的“评测中心”：
+打开 `/ops` 的“评测中心”：
 
-1. 默认选择3条核心用例，批次命名为 `baseline-v1` 并运行；
-2. 打开中奖诈骗失败用例，查看实际回复、失败证据和 Trace；
-3. 在 `/skills` 修改 `risk-check`，加入“彩票诈骗、一等奖、安全账户、转账、不要提供敏感信息”等明确规则并保存；
+1. 保留默认选中的 3 条核心黄金用例，命名 `baseline-v1` 并运行；
+2. 打开“中奖骗局”用例，查看实际回复、失败证据和执行轨迹；
+3. 在 `/skills` 修改 `risk-check`，补充中奖诈骗、不要转账、不要提供敏感信息和官方渠道核验等规则；
 4. 回到评测中心，复用基线用例，命名 `risk-fix-v2` 后运行；
-5. 在批次对比中选择两个批次，先确认可比，再查看“已修复”和“新增失败”。
+5. 在批次对比中先确认运行条件一致，再查看“已修复”和“新增失败”。
 
-演示稳定模式会读取当前 `risk-check` 正文：基线中的中奖诈骗用例稳定为 FAIL；补充规则后，同一用例稳定转为 PASS。安全劝阻回复允许发送，诱导转账或承诺兑奖的危险回复才会被阻断。
+默认基线使用内置确定性输出，不依赖外部模型凭据。基线中的中奖诈骗用例应为 FAIL；补充规则后，同一用例应转为 PASS。安全劝阻回复允许发送，诱导转账或承诺兑奖的危险回复才会被阻断。真实模型可以在模型配置页切换，但真实模型结果不作为课堂基线证据。
 
-`classroom:dev` 会在5000端口以Webpack启动项目，并在当前进程中强制使用 `classroom-fixture`。这样即使电脑已有 `LLM_PROVIDER=coze` 等系统环境变量，也不会污染课堂演示。普通开发或接入真实模型时仍使用 `pnpm dev`。
+学生只修改 Skill、Prompt 或规则配置，再运行回归评测。不要直接修改评测器、业务数据或 Agent 主链路；如果确需修改代码，应另建分支并重新验证完整项目。
 
 ## 项目结构
 
@@ -66,10 +66,10 @@ src/
 │   └── utils.ts            # cn() 等工具函数
 └── hooks/                   # 自定义 React Hooks（可选）
 
-server/
-├── index.ts                 # 自定义服务器入口
-├── tsconfig.json           # Server TypeScript 配置
-└── dist/                    # 编译输出目录（自动生成）
+scripts/
+├── classroom-reset.mjs     # 恢复课程基线并清理运行产物
+├── dev.sh / prepare.sh     # 本地开发准备与启动辅助脚本
+└── build.sh / start.sh     # 生产构建与启动脚本
 ```
 
 ## 核心开发规范

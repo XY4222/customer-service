@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { listEnabledSkills } from "@/lib/skills-registry";
 import { getToolCatalog } from "@/lib/tools";
+import { listToolConfigs } from "@/lib/store";
 import { readPlannerConfig, generatePlan } from "@/lib/planner";
 
 export const dynamic = "force-dynamic";
@@ -12,8 +13,11 @@ export async function POST(req: Request) {
     const { question }: { question?: string } = body;
 
     const skills = listEnabledSkills();
-    const toolCat = getToolCatalog();
-    const tools = toolCat.filter((t) => t.enabled);
+    // 工具列表必须与 generatePlan 一致：启停以 tools-config.json 为准，
+    // 否则预览会把被禁用的工具（如 reserve_stock）显示成可用
+    const toolConfigs = await listToolConfigs();
+    const enabledToolIds = new Set(toolConfigs.filter((t) => t.enabled).map((t) => t.id));
+    const tools = getToolCatalog().filter((t) => enabledToolIds.has(t.id));
     const cfg = readPlannerConfig();
 
     let generatedPlan = null;

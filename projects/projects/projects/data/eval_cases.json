@@ -1,36 +1,6 @@
 {
   "cases": [
     {
-      "id": "case1hk4p779",
-      "name": "我想买点办公室零食，要麻辣口味的，预算 ",
-      "question": "我想买点办公室零食，要麻辣口味的，预算 30 元左右",
-      "expectedReply": "我还不太清楚你具体的需求和商品信息哦，可以告诉我你想买什么、有什么偏好，或者把刚才的具体内容补充完整，我来帮你生成合适的客服回复。",
-      "expectedKeywords": [],
-      "expectRiskPassed": true,
-      "enabled": true,
-      "evalDimension": "keyword",
-      "tags": [
-        "from_run"
-      ],
-      "sourceRunId": "run_rq9rs3e64r8j",
-      "createdAt": "2026-07-15T09:14:05.834Z"
-    },
-    {
-      "id": "casejoe4cg75",
-      "name": "测试问题加入评测集",
-      "question": "测试问题加入评测集",
-      "expectedReply": "测试回复",
-      "expectedKeywords": [],
-      "expectRiskPassed": true,
-      "enabled": true,
-      "evalDimension": "keyword",
-      "tags": [
-        "from_run"
-      ],
-      "sourceRunId": "test1",
-      "createdAt": "2026-07-15T02:07:43.729Z"
-    },
-    {
       "id": "case_budget_spicy",
       "name": "麻辣办公室零食·30元预算",
       "question": "想买点麻辣口味的办公室零食，预算 30 元左右",

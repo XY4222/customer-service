@@ -36,6 +36,10 @@ export async function GET(request: NextRequest) {
     ratings: (r as any).ratings,
     handoffToHuman: r.handoffToHuman,
     handoffReason: r.handoffReason,
+    /* 坐席代笔：列表要能区分「待人工 / 已选候选 / 已发送」三种状态 */
+    selectedCandidateId: r.selectedCandidateId ?? null,
+    sentAt: r.sentAt ?? null,
+    draftCandidateCount: r.draftCandidates?.length ?? 0,
     needsClarification: r.needsClarification,
     clarificationQuestion: r.clarificationQuestion,
     steps: (r.steps || []).map((s, idx) => ({

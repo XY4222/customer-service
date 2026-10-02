@@ -5,6 +5,8 @@ import { Send, Loader2, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { MemoryPanel } from "@/components/memory-panel";
+import { useVisitorMemory } from "@/hooks/use-visitor-memory";
 import React from "react";
 
 /**
@@ -121,6 +123,8 @@ export function DemoChat() {
   const [ratingSubmitted, setRatingSubmitted] = useState(false);
   const [showRating, setShowRating] = useState(false);
   const [conversationId] = useState(() => `chat_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`);
+  // 长期记忆：与 Agent 控制台共用同一个 visitorId 与画像
+  const { visitorId, memoryInfo, applyMemoryEvent } = useVisitorMemory();
   const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -187,7 +191,7 @@ export function DemoChat() {
             Accept: "text/event-stream",
             "Cache-Control": "no-cache",
           },
-          body: JSON.stringify({ question, source: "demo", conversationId }),
+          body: JSON.stringify({ question, source: "demo", conversationId, visitorId: visitorId ?? undefined }),
           // @ts-expect-error Node fetch supports duplex for streamed request compatibility.
           duplex: "half",
         });
@@ -317,6 +321,8 @@ export function DemoChat() {
                   content: `⚠️ 第 ${idx} 步「${label}」遇到问题，自动兜底中…`,
                   status: "running",
                 });
+              } else if (evt.type === "memory_recalled" || eventName === "memory_recalled") {
+                applyMemoryEvent(evt);
               } else if (evt.type === "final_reply" || eventName === "final_reply") {
                 fullReply = evt.finalReply ?? evt.reply ?? "";
                 updateAi({ content: fullReply, status: "done" });
@@ -368,7 +374,7 @@ export function DemoChat() {
         setSending(false);
       }
     },
-    [conversationId, pushMessage, resetIdleTimer, sending]
+    [conversationId, pushMessage, resetIdleTimer, sending, visitorId, applyMemoryEvent]
   );
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -423,6 +429,11 @@ export function DemoChat() {
             <span className="ml-1 text-muted-foreground/60 text-[10px]">· build v2024-11-15b</span>
           </div>
         </div>
+      </div>
+
+      {/* 长期记忆：跨会话画像（老访客再次进来时提示 AI 记得什么） */}
+      <div className="pt-3 shrink-0 empty:hidden">
+        <MemoryPanel info={memoryInfo} />
       </div>
 
       {/* 消息区 */}

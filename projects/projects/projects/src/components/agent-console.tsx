@@ -11,6 +11,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { RotateCcw } from "lucide-react";
+import { MemoryPanel } from "@/components/memory-panel";
+import { useVisitorMemory } from "@/hooks/use-visitor-memory";
 
 interface PlanStep {
   step: number;
@@ -106,6 +108,8 @@ export function AgentConsole() {
   const [messages, setMessages] = useState<
     { role: "user" | "assistant" | "system"; content: string; ts: number }[]
   >([]);
+  // ---- 长期记忆（visitorId + 已有画像，跨会话稳定） ----
+  const { visitorId, memoryInfo, applyMemoryEvent } = useVisitorMemory();
   const scrollRef = useRef<HTMLDivElement>(null);
   type Turn = {
     id: string;
@@ -227,6 +231,9 @@ export function AgentConsole() {
             localRunId = parsed.runId ?? localRunId;
             if (localRunId) setCurrentRunId(localRunId);
           }
+          if (event === 'memory_recalled') {
+            applyMemoryEvent(parsed);
+          }
           if (event === 'plan_ready') {
             const wrapper = parsed as { plan?: Plan; reasoning?: string };
             const p = wrapper?.plan;
@@ -329,7 +336,7 @@ export function AgentConsole() {
         }).catch(() => {});
       }
     }
-  }, [citations, steps]);
+  }, [citations, steps, applyMemoryEvent]);
 
   const handleRetryFrom = useCallback(async (fromStepIndex: number) => {
     if (!currentRunId) {
@@ -411,6 +418,7 @@ export function AgentConsole() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           question: q,
+          visitorId: visitorId ?? undefined,
           conversationHistory: turns.slice(-10).map((t) => ({
             role: t.role,
             content: t.content,
@@ -464,7 +472,7 @@ export function AgentConsole() {
         });
       }
     }
-  }, [question, running, turns, consumeSSE]);
+  }, [question, running, turns, consumeSSE, visitorId]);
 
   useEffect(() => {
     runRef.current = handleRun;
@@ -557,6 +565,7 @@ export function AgentConsole() {
             )}
           </div>
         )}
+        <MemoryPanel info={memoryInfo} />
         <Card className="p-0 overflow-hidden flex flex-col" style={{ maxHeight: "70vh" }}>
           {/* 对话历史 */}
           <div

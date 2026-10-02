@@ -58,11 +58,31 @@ async function writeTextAtomic(target, value) {
 
 await fs.mkdir(path.dirname(riskSkillPath), { recursive: true });
 await writeTextAtomic(riskSkillPath, baselineRiskSkill);
-await writeJson("eval_batches.json", { batches: [] });
-await writeJson("skill-versions.json", { bySkillId: {} });
+
+// 课堂基线只保留业务数据和黄金用例。运行记录、标注和实验结果属于上一次
+// 工作区的运行产物，不能随仓库一起进入下一轮学员练习。
+const resetState = {
+  "runs.json": { runs: [] },
+  "ratings.json": { ratings: [] },
+  "annotations.json": { annotations: [] },
+  "improvements.json": { improvements: [] },
+  "ab-tests.json": { tests: [] },
+  "eval_batches.json": { batches: [] },
+  "skill-versions.json": { bySkillId: {} },
+};
+for (const [fileName, value] of Object.entries(resetState)) {
+  await writeJson(fileName, value);
+}
 
 const casesPath = path.join(dataDir, "eval_cases.json");
 const evalStore = JSON.parse(await fs.readFile(casesPath, "utf-8"));
+const legacyCaseIds = new Set(["case1hk4p779", "casejoe4cg75"]);
+const seenCaseIds = new Set();
+evalStore.cases = (evalStore.cases || []).filter((item) => {
+  if (!item?.id || legacyCaseIds.has(item.id) || seenCaseIds.has(item.id)) return false;
+  seenCaseIds.add(item.id);
+  return true;
+});
 const lotteryCase = evalStore.cases?.find((item) => item.id === "case_illegal_winning_claim");
 if (lotteryCase) {
   lotteryCase.enabled = true;
@@ -77,4 +97,4 @@ const llmConfig = JSON.parse(await fs.readFile(configPath, "utf-8"));
 llmConfig.activeProvider = "classroom-fixture";
 await writeJson("llm-config.json", llmConfig);
 
-console.log("Classroom state reset: fixture provider, baseline risk-check, empty eval batches and skill versions.");
+console.log("Classroom state reset: fixture provider, baseline risk-check, curated eval cases and empty runtime records.");

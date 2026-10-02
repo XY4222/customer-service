@@ -1,0 +1,53 @@
+{
+  "visitorId": "cu_zhangwei",
+  "createdAt": "2026-09-20T05:00:00.000Z",
+  "updatedAt": "2026-09-28T02:00:00.000Z",
+  "isNewUser": false,
+  "interactionCount": 3,
+  "facts": [
+    {
+      "kind": "restriction",
+      "content": "孩子对花生过敏，需避开花生成分",
+      "sourceRunId": "run_seed30e210",
+      "updatedAt": "2026-09-28T02:00:00.000Z"
+    },
+    {
+      "kind": "scenario",
+      "content": "常给孩子买零食",
+      "sourceRunId": "run_seed30e210",
+      "updatedAt": "2026-09-28T02:00:00.000Z"
+    },
+    {
+      "kind": "budget",
+      "content": "预算约20元",
+      "sourceRunId": "run_seed30e210",
+      "updatedAt": "2026-09-28T02:00:00.000Z"
+    },
+    {
+      "kind": "identity",
+      "content": "老客，孩子零食常购用户",
+      "sourceRunId": "run_seed30e210",
+      "updatedAt": "2026-09-28T02:00:00.000Z"
+    }
+  ],
+  "episodes": [
+    {
+      "runId": "run_seed30e210",
+      "question": "小孩能吃的糖果再买两袋，别有花生的",
+      "summary": "老客复购儿童糖果，再次强调避开花生成分",
+      "products": [
+        "水果软糖"
+      ],
+      "ts": "2026-09-28T02:00:00.000Z"
+    },
+    {
+      "runId": "run_seed31f217",
+      "question": "有没有适合小孩吃的糖果？预算20元，孩子花生过敏",
+      "summary": "首咨儿童糖果，标记花生过敏禁忌",
+      "products": [
+        "水果软糖"
+      ],
+      "ts": "2026-09-20T05:00:00.000Z"
+    }
+  ]
+}

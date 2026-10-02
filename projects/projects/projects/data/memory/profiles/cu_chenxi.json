@@ -1,0 +1,38 @@
+{
+  "visitorId": "cu_chenxi",
+  "createdAt": "2026-09-29T02:00:00.000Z",
+  "updatedAt": "2026-09-29T02:00:00.000Z",
+  "isNewUser": true,
+  "interactionCount": 1,
+  "facts": [
+    {
+      "kind": "restriction",
+      "content": "孕期用户，需注意食品安全",
+      "sourceRunId": "run_seed40o280",
+      "updatedAt": "2026-09-29T02:00:00.000Z"
+    },
+    {
+      "kind": "preference",
+      "content": "偏好无糖/低糖零食",
+      "sourceRunId": "run_seed40o280",
+      "updatedAt": "2026-09-29T02:00:00.000Z"
+    },
+    {
+      "kind": "budget",
+      "content": "预算约50元",
+      "sourceRunId": "run_seed40o280",
+      "updatedAt": "2026-09-29T02:00:00.000Z"
+    }
+  ],
+  "episodes": [
+    {
+      "runId": "run_seed40o280",
+      "question": "我想买点健康的小零食，预算50元，孕妇能吃的",
+      "summary": "孕妈咨询无糖低糖健康零食，已做安全提示",
+      "products": [
+        "无糖坚果"
+      ],
+      "ts": "2026-09-29T02:00:00.000Z"
+    }
+  ]
+}

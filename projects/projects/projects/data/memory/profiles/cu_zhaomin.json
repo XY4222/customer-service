@@ -1,0 +1,53 @@
+{
+  "visitorId": "cu_zhaomin",
+  "createdAt": "2026-09-21T05:00:00.000Z",
+  "updatedAt": "2026-09-27T02:00:00.000Z",
+  "isNewUser": false,
+  "interactionCount": 3,
+  "facts": [
+    {
+      "kind": "preference",
+      "content": "常买坚果类",
+      "sourceRunId": "run_seed50y350",
+      "updatedAt": "2026-09-27T02:00:00.000Z"
+    },
+    {
+      "kind": "scenario",
+      "content": "追剧场景吃零食",
+      "sourceRunId": "run_seed50y350",
+      "updatedAt": "2026-09-27T02:00:00.000Z"
+    },
+    {
+      "kind": "budget",
+      "content": "预算约40元",
+      "sourceRunId": "run_seed50y350",
+      "updatedAt": "2026-09-27T02:00:00.000Z"
+    },
+    {
+      "kind": "identity",
+      "content": "老客，每周复购每日坚果",
+      "sourceRunId": "run_seed50y350",
+      "updatedAt": "2026-09-27T02:00:00.000Z"
+    }
+  ],
+  "episodes": [
+    {
+      "runId": "run_seed50y350",
+      "question": "周末追剧囤点货，还是老样子每日坚果",
+      "summary": "老客复购每日坚果，追剧囤货",
+      "products": [
+        "每日坚果"
+      ],
+      "ts": "2026-09-27T02:00:00.000Z"
+    },
+    {
+      "runId": "run_seed51z357",
+      "question": "追剧想嗑点坚果，有推荐的吗",
+      "summary": "推荐每日坚果，用户好评",
+      "products": [
+        "每日坚果"
+      ],
+      "ts": "2026-09-21T05:00:00.000Z"
+    }
+  ]
+}

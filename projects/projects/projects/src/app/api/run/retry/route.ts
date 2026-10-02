@@ -117,10 +117,23 @@ export async function POST(req: NextRequest) {
           original.finalReply = result.finalReply ?? null;
           original.riskResult = (result.riskResult as RunRecord["riskResult"]) ?? null;
           original.status = result.riskResult?.passed === false ? "risk_blocked" : "success";
-          original.handoffToHuman = result.riskResult?.passed === false;
-          original.handoffReason = result.riskResult?.passed === false ? "risk_blocked" : undefined;
+          /* 复跑要同时尊重「风控未过」与「确定性/模型判定的转人工」，否则复跑会把待人工会话
+             悄悄变回普通会话（从坐席工作台消失） */
+          const retryRiskBlocked = result.riskResult?.passed === false;
+          const retryHandoff = !!(result as { handoffToHuman?: boolean }).handoffToHuman;
+          original.handoffToHuman = retryRiskBlocked || retryHandoff;
+          original.handoffReason = retryRiskBlocked
+            ? "risk_blocked"
+            : ((result as { handoffReason?: string | null }).handoffReason ?? undefined);
           original.handoffIssues = result.riskResult?.issues?.map((i: any) => i.detail ?? String(i)) ?? [];
-          original.handoffAt = result.riskResult?.passed === false ? new Date().toISOString() : undefined;
+          original.handoffAt = original.handoffToHuman ? new Date().toISOString() : undefined;
+          /* 复跑会重生成回复：候选/选择/发送留痕基于旧回复，必须一并清掉，避免留痕与内容不一致 */
+          original.draftCandidates = undefined;
+          original.draftUsedFallback = undefined;
+          original.selectedCandidateId = null;
+          original.selectedBy = null;
+          original.selectedAt = null;
+          original.sentAt = null;
           original.finishedAt = new Date().toISOString();
           original.durationMs = mergedSteps.reduce((acc: number, s) => {
             if (s.startedAt && s.finishedAt) return acc + (new Date(s.finishedAt).getTime() - new Date(s.startedAt).getTime());
